@@ -1,0 +1,25 @@
+{
+  "name": "logzio-nodejs",
+  "description": "A nodejs implementation for sending logs to Logz.IO cloud service",
+  "version": "0.1",
+  "author": "Gilly Barr <gilly@logz.io>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/logshero/logzio-nodejs.git"
+  },
+  "keywords": [
+    "cloud computing",
+    "log analytics",
+    "api",
+    "logging",
+    "logzio"
+  ],
+  "dependencies": {
+    "request": "2.49.x",
+    "json-stringify-safe": "5.0.x"
+  },
+  "main": "./lib/logzio-nodejs",
+  "engines": {
+    "node": ">= 0.8.0"
+  }
+}
