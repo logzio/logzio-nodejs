@@ -4,7 +4,7 @@ NodeJS logger for LogzIO
 
 Sample usage :
 ```javascript
-var logger = require('logzio-logger').createLogger({
+var logger = require('logzio-nodejs').createLogger({
     token: '__YOUR_API_TOKEN__',
     type: 'YourLogType'     // OPTIONAL (If none is set, it will be 'nodejs')
 });
