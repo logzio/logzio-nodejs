@@ -1,8 +1,14 @@
 {
   "name": "logzio-nodejs",
   "description": "A nodejs implementation for sending logs to Logz.IO cloud service",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Gilly Barr <gilly@logz.io>",
+  "contributors": [
+    {
+      "name": "Asaf Mesika",
+      "email": "amesika@logz.io"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/logshero/logzio-nodejs.git"
@@ -18,8 +24,20 @@
     "request": "2.49.x",
     "json-stringify-safe": "5.0.x"
   },
+  "devDependencies": {
+    "assert": "^1.3.0",
+    "async": "1.4.2",
+    "mocha": "^2.3.3",
+    "nock": "^2.13.0",
+    "should": "^7.1.0",
+    "sinon": "^1.17.1"
+  },
   "main": "./lib/logzio-nodejs",
   "engines": {
     "node": ">= 0.8.0"
+  },
+  "license": "(Apache-2.0)",
+  "scripts": {
+    "test": "node_modules/.bin/mocha -w"
   }
 }
