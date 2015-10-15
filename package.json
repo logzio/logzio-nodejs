@@ -1,7 +1,7 @@
 {
   "name": "logzio-nodejs",
   "description": "A nodejs implementation for sending logs to Logz.IO cloud service",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "Gilly Barr <gilly@logz.io>",
   "contributors": [
     {
