@@ -40,3 +40,8 @@ logger.log(obj);
 * **timeout** - the read/write/connection timeout in milliseconds.
 
 
+## Update log
+**0.3.1**
+* Bug fix : When calling `log` with a string parameter, the object isn't constructed properly.
+
+
