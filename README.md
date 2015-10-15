@@ -43,5 +43,6 @@ logger.log(obj);
 ## Update log
 **0.3.1**
 * Bug fix : When calling `log` with a string parameter, the object isn't constructed properly.
-
+**0.3.2**
+* Enhancement : Added option to attach extra fields to each log in a specific instance of the logger.
 
