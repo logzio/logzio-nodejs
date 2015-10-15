@@ -16,7 +16,7 @@ var createLogger = function(options) {
 describe('logger', function() {
     this.timeout(25000);
 
-    describe('#log-string', function () {
+    describe('#log-single-line', function () {
         before(function(done){
             sinon
                 .stub(request, 'post')
@@ -29,7 +29,7 @@ describe('logger', function() {
             done();
         });
 
-        it('Send 1 line', function (done) {
+        it('sends log as a string', function (done) {
             var logger = createLogger({bufferSize:1, callback: done});
             sinon.spy(logger, '_createBulk');
 
@@ -39,28 +39,52 @@ describe('logger', function() {
 
             logger._createBulk.restore();
         });
-    });
 
-    describe('#log-single-object', function () {
-        before(function(done){
-            sinon
-                .stub(request, 'post')
-                .yields(null, {statusCode: 200} , "");
-            done();
+        it('sends log as a string with extra fields', function(done) {
+            var logger = createLogger({
+                bufferSize:1,
+                callback: done,
+                extraFields:{
+                    extraField1: 'val1',
+                    extraField2: 'val2'
+                }
+            });
+            sinon.spy(logger, '_createBulk');
+
+            var logMsg = "hello there from test";
+            logger.log(logMsg);
+            assert(logger._createBulk.getCall(0).args[0][0].extraField1 == 'val1');
+            assert(logger._createBulk.getCall(0).args[0][0].extraField2 == 'val2');
+
+            logger._createBulk.restore();
         });
 
-        after(function(done){
-            request.post.restore();
-            done();
-        });
-
-        it('Send object', function (done) {
+        it('sends log as an object', function (done) {
             var logger = createLogger({bufferSize:1, callback: done});
             sinon.spy(logger, '_createBulk');
 
             var logMsg = {message: "hello there from test"};
             logger.log(logMsg);
             assert(logger._createBulk.getCall(0).args[0][0].message == logMsg.message);
+
+            logger._createBulk.restore();
+        });
+
+        it('sends log as an object with extra fields', function(done) {
+            var logger = createLogger({
+                bufferSize:1,
+                callback: done,
+                extraFields:{
+                    extraField1: 'val1',
+                    extraField2: 'val2'
+                }
+            });
+            sinon.spy(logger, '_createBulk');
+
+            var logMsg = {message: "hello there from test"};
+            logger.log(logMsg);
+            assert(logger._createBulk.getCall(0).args[0][0].extraField1 == 'val1');
+            assert(logger._createBulk.getCall(0).args[0][0].extraField2 == 'val2');
 
             logger._createBulk.restore();
         });
