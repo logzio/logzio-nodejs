@@ -46,4 +46,6 @@ logger.log(obj);
 <br/>
 **0.3.2**  
 * Enhancement : Added option to attach extra fields to each log in a specific instance of the logger.
-
+<br/>
+**0.3.4**
+* Bug fix : `jsonToString()` was throwing an error in the catch()block  
