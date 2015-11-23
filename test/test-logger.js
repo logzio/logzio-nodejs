@@ -4,11 +4,15 @@ var request = require('request');
 var nock = require('nock');
 var assert = require('assert');
 
+var dummyHost = "logz.io";
+var nockHttpAddress = "http://"+dummyHost+":8070";
+
 var createLogger = function(options) {
     var myoptions = options;
     myoptions.token = 'acrSGIefherhsZYOpzxeGBpTyqgSzaMk';
     myoptions.type = 'testnode';
     myoptions.debug = true;
+    myoptions.host = dummyHost;
     return logzioLogger.createLogger(myoptions);
 };
 
@@ -151,44 +155,79 @@ describe('logger', function() {
                 if (expectedTimes == timesCalled) done()
             }
             var logger = createLogger({bufferSize:100, sendIntervalMs:10000, callback: shouldBeCalledTimes});
+
+            // These messages should be sent in 1 bulk 10 seconds from now (due to sendIntervalMs)
             logger.log({messge:"hello there from test", testid:5});
             logger.log({messge:"hello there from test2", testid:5});
             logger.log({messge:"hello there from test3", testid:5});
 
+            // Schedule 100 msgs (buffer size) which should be sent in one bulk 11 seconds from start
             setTimeout(function(){
                 for (var i = 0; i < 100; i++) {
                     logger.log({messge:"hello there from test", testid:6});
                 }
             }, 11000)
         });
+
     });
 
-    describe('#retries', function () {
+    describe('#recover-after-server-fails-one-time', function () {
+        var errorAndThenSuccessScope;
+        var extraRequestScope;
         before(function(done){
-            nock('http://listener.logz.io')
+            nock.cleanAll();
+            errorAndThenSuccessScope = nock(nockHttpAddress)
                 .post('/')
-                .delay(2000) // 2 seconds
+                .socketDelay(5000)
+                .query(true)
+                .once()
+                .reply(200, '')
+
+                // success
+                .post('/')
+                .socketDelay(0)
+                .query(true)
+                .once()
                 .reply(200, '');
+
+            extraRequestScope = nock(nockHttpAddress)
+                .filteringPath(function(path) {
+                    return '/';
+                })
+                .post('/')
+                .once()
+                .reply(200, '')
+
             done();
         });
 
         after(function(done){
             nock.restore();
+            nock.cleanAll();
             done();
         });
 
-        it('retry test', function (done) {
-            var logger = createLogger({bufferSize:3, callback: function(e) {
-                if (e) {
-                    done();
+        it('Msgs are only sent once', function (done) {
+
+            // very small timeout so the first request will fail (nock setup this way above) and
+            // then second attempt will succeed
+            var logger = createLogger({bufferSize:1, sendIntervalMs:50000, timeout: 1000});
+
+            logger.log({messge:"hello there from test", testid:5});
+
+            setTimeout(function(){
+                if (!errorAndThenSuccessScope.isDone()) {
+                    done(new Error('pending mocks: ' + errorAndThenSuccessScope.pendingMocks()));
                 } else {
-                    done("failed");
+                    if (extraRequestScope.isDone()) {
+                        done(new Error("We don't expect another request"))
+                    } else {
+                        done();
+                    }
                 }
-            } , timeout:1});
-            logger.log({messge:"hello there from test", testid:2});
-            logger.log({messge:"hello there from test2", testid:2});
-            logger.log({messge:"hello there from test3", testid:2});
+            }, 10000)
         });
+
     });
 
     describe('#bad-request', function () {
@@ -204,7 +243,7 @@ describe('logger', function() {
             done();
         });
 
-        it('bad request', function (done) {
+        it('bad request test', function (done) {
             var logger = createLogger({bufferSize:3, callback: function(err) {
                 if (err) {
                     done();

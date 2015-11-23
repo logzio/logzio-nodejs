@@ -39,13 +39,22 @@ logger.log(obj);
 * **callback** - a callback function called when an unrecoverable error has occured in the logger. The function API is: function(err) - err being the Error object.
 * **timeout** - the read/write/connection timeout in milliseconds.
 
-
 ## Update log
-**0.3.1**
-* Bug fix : When calling `log` with a string parameter, the object isn't constructed properly.  
-<br/>
-**0.3.2**  
-* Enhancement : Added option to attach extra fields to each log in a specific instance of the logger.
-<br/>
+**0.3.5**
+- Bug fix : upon retry (in case of network error), the message gets sent forever  
+
 **0.3.4**
-* Bug fix : `jsonToString()` was throwing an error in the catch()block  
+- Bug fix : `jsonToString()` was throwing an error in the catch()block  
+
+**0.3.2**  
+- Enhancement : Added option to attach extra fields to each log in a specific instance of the logger.
+
+**0.3.1**
+- Bug fix : When calling `log` with a string parameter, the object isn't constructed properly.  
+
+
+
+# Contibutors
+
+- run `npm install` to install required dependencies
+- run `npm test` to run unit tests
