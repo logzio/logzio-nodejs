@@ -40,6 +40,9 @@ logger.log(obj);
 * **timeout** - the read/write/connection timeout in milliseconds.
 
 ## Update log
+**0.3.6**
+- Fixed URL for github repository in package.json
+
 **0.3.5**
 - Bug fix : upon retry (in case of network error), the message gets sent forever  
 
