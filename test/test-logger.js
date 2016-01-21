@@ -42,6 +42,7 @@ describe('logger', function() {
             assert(logger._createBulk.getCall(0).args[0][0].message == logMsg);
 
             logger._createBulk.restore();
+            logger.close();
         });
 
         it('sends log as a string with extra fields', function(done) {
@@ -61,6 +62,7 @@ describe('logger', function() {
             assert(logger._createBulk.getCall(0).args[0][0].extraField2 == 'val2');
 
             logger._createBulk.restore();
+            logger.close();
         });
 
         it('sends log as an object', function (done) {
@@ -72,6 +74,7 @@ describe('logger', function() {
             assert(logger._createBulk.getCall(0).args[0][0].message == logMsg.message);
 
             logger._createBulk.restore();
+            logger.close();
         });
 
         it('sends log as an object with extra fields', function(done) {
@@ -91,6 +94,7 @@ describe('logger', function() {
             assert(logger._createBulk.getCall(0).args[0][0].extraField2 == 'val2');
 
             logger._createBulk.restore();
+            logger.close();
         });
     });
 
@@ -112,6 +116,7 @@ describe('logger', function() {
             logger.log({messge:"hello there from test", testid:2});
             logger.log({messge:"hello there from test2", testid:2});
             logger.log({messge:"hello there from test3", testid:2});
+            logger.close();
         });
 
         it('Send multiple bulks', function (done) {
@@ -129,9 +134,33 @@ describe('logger', function() {
             logger.log({messge:"hello there from test", testid:4});
             logger.log({messge:"hello there from test2", testid:4});
             logger.log({messge:"hello there from test3", testid:4});
+            logger.close();
+        });
+    });
+
+    describe('#log-closing', function () {
+        before(function(done){
+            sinon
+                .stub(request, 'post')
+                .yields(null, {statusCode: 200} , "");
+            done();
         });
 
+        after(function(done){
+            request.post.restore();
+            done();
+        });
 
+        it('Don\'t allow logs after closing', function (done) {
+            var logger = createLogger({bufferSize:1});
+            logger.close();
+            try {
+              logger.log({messge:"hello there from test"});
+              done("Expected an error when logging into a closed log!");
+            } catch (ex) {
+              done();
+            }
+        });
     });
 
     describe('#timers', function () {
@@ -166,7 +195,9 @@ describe('logger', function() {
                 for (var i = 0; i < 100; i++) {
                     logger.log({messge:"hello there from test", testid:6});
                 }
+                logger.close();
             }, 11000)
+
         });
 
     });
@@ -214,6 +245,7 @@ describe('logger', function() {
             var logger = createLogger({bufferSize:1, sendIntervalMs:50000, timeout: 1000});
 
             logger.log({messge:"hello there from test", testid:5});
+            logger.close();
 
             setTimeout(function(){
                 if (!errorAndThenSuccessScope.isDone()) {
@@ -254,6 +286,7 @@ describe('logger', function() {
             logger.log({messge:"hello there from test", testid:2});
             logger.log({messge:"hello there from test2", testid:2});
             logger.log({messge:"hello there from test3", testid:2});
+            logger.close();
         });
     });
 
