@@ -40,6 +40,11 @@ logger.log(obj);
 * **timeout** - the read/write/connection timeout in milliseconds.
 
 ## Update log
+**0.3.8**
+- Updated listener url
+- Added `sendAndClose()` method which immediately sends the queued messages and clears the global timer
+- Added option to supress error messages
+
 **0.3.6**
 - Fixed URL for github repository in package.json
 
