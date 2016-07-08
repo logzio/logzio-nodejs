@@ -27,7 +27,7 @@
   "dependencies": {
     "json-stringify-safe": "5.0.x",
     "lodash": "^3.10.1",
-    "request": "2.49.x"
+    "request": "2.68.0"
   },
   "devDependencies": {
     "assert": "^1.3.0",
