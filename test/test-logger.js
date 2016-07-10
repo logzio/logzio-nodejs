@@ -13,13 +13,12 @@ var createLogger = function(options) {
     myoptions.type = 'testnode';
     myoptions.debug = true;
     myoptions.host = dummyHost;
+    myoptions.sendIntervalMs = options.sendIntervalMs || 1000;
     return logzioLogger.createLogger(myoptions);
 };
 
 
 describe('logger', function() {
-
-    this.timeout(40000);
 
     describe('logs a single line', function () {
         before(function(done){
@@ -35,7 +34,12 @@ describe('logger', function() {
         });
 
         it('sends log as a string', function (done) {
-            var logger = createLogger({bufferSize:1, callback: done});
+
+            var logger;
+            logger = createLogger({
+                bufferSize: 1, 
+                callback: done
+            });
             sinon.spy(logger, '_createBulk');
 
             var logMsg = 'hello there from test';
@@ -43,6 +47,7 @@ describe('logger', function() {
             assert(logger._createBulk.getCall(0).args[0][0].message == logMsg);
 
             logger._createBulk.restore();
+            logger.close();
         });
 
         it('sends log as a string with extra fields', function(done) {
@@ -62,6 +67,7 @@ describe('logger', function() {
             assert(logger._createBulk.getCall(0).args[0][0].extraField2 == 'val2');
 
             logger._createBulk.restore();
+            logger.close();
         });
 
         it('sends log as an object', function (done) {
@@ -73,6 +79,7 @@ describe('logger', function() {
             assert(logger._createBulk.getCall(0).args[0][0].message == logMsg.message);
 
             logger._createBulk.restore();
+            logger.close();
         });
 
         it('sends log as an object with extra fields', function(done) {
@@ -92,6 +99,7 @@ describe('logger', function() {
             assert(logger._createBulk.getCall(0).args[0][0].extraField2 == 'val2');
 
             logger._createBulk.restore();
+            logger.close();
         });
     });
 
@@ -109,15 +117,20 @@ describe('logger', function() {
         });
 
         it('Send multiple lines', function (done) {
+            
             var logger = createLogger({ bufferSize: 3, callback: done });
+
             logger.log({ messge: 'hello there from test', testid: 2 });
             logger.log({ messge: 'hello there from test2', testid: 2 });
             logger.log({ messge: 'hello there from test3', testid: 2 });
+
+            logger.close();
         });
 
         it('Send multiple bulks', function (done) {
             var timesCalled = 0;
             var expectedTimes = 2;
+
             function assertCalled() {
                 timesCalled++;
 
@@ -129,18 +142,45 @@ describe('logger', function() {
                 }
             }
 
-            var logger = createLogger({bufferSize:3, callback: assertCalled});
-
-            logger.log({ messge: 'hello there from test', testid: 3 });
-            logger.log({ messge: 'hello there from test2', testid: 3 });
-            logger.log({ messge: 'hello there from test3', testid: 3 });
+            var logger = createLogger({
+                bufferSize: 3, 
+                callback: assertCalled
+            });
 
             logger.log({ messge: 'hello there from test', testid: 4 });
             logger.log({ messge: 'hello there from test2', testid: 4 });
             logger.log({ messge: 'hello there from test3', testid: 4 });
+            logger.log({ messge: 'hello there from test', testid: 4 });
+            logger.log({ messge: 'hello there from test2', testid: 4 });
+            logger.log({ messge: 'hello there from test3', testid: 4 });
+
+            logger.close();
+        });
+    });
+
+    describe('#log-closing', function () {
+        before(function(done){
+            sinon
+                .stub(request, 'post')
+                .yields(null, {statusCode: 200} , "");
+            done();
         });
 
+        after(function(done){
+            request.post.restore();
+            done();
+        });
 
+        it('Don\'t allow logs after closing', function (done) {
+            var logger = createLogger({bufferSize:1});
+            logger.close();
+            try {
+              logger.log({messge:"hello there from test"});
+              done("Expected an error when logging into a closed log!");
+            } catch (ex) {
+              done();
+            }
+        });
     });
 
     describe('timers', function () {
@@ -157,14 +197,21 @@ describe('logger', function() {
         });
 
         it('timer send test', function (done) {
+            this.timeout(20000);
+
             var timesCalled = 0;
             var expectedTimes = 2;
+
             function assertCalled() {
                 timesCalled++;
                 if (expectedTimes == timesCalled)
                     done();
             }
-            var logger = createLogger({ bufferSize: 100, sendIntervalMs: 10000, callback: assertCalled });
+            var logger = createLogger({ 
+                bufferSize: 100, 
+                callback: assertCalled,
+                sendIntervalMs: 5000
+            });
 
             // These messages should be sent in 1 bulk 10 seconds from now (due to sendIntervalMs)
             logger.log({ messge: 'hello there from test', testid: 5 });
@@ -174,9 +221,14 @@ describe('logger', function() {
             // Schedule 100 msgs (buffer size) which should be sent in one bulk 11 seconds from start
             setTimeout(function() {
                 for (var i = 0; i < 100; i++) {
-                    logger.log({ messge: 'hello there from test', testid: 6 });
+                    logger.log({ 
+                        messge: 'hello there from test', 
+                        testid: 6 
+                    });
                 }
-            }, 11000)
+                logger.close();
+            }, 6000)
+
         });
     });
 
@@ -185,6 +237,7 @@ describe('logger', function() {
 
         var errorAndThenSuccessScope;
         var extraRequestScope;
+
         before(function(done){
             nock.cleanAll();
             errorAndThenSuccessScope = nock(nockHttpAddress)
@@ -221,21 +274,22 @@ describe('logger', function() {
         it('Msgs are only sent once', function (done) {
             // very small timeout so the first request will fail (nock setup this way above) and
             // then second attempt will succeed
-
-            var checkResponse = function(err) {
-                if (err) {
-                    console.log('error: ' + err);
-                    fail('There was an error when sending the log');
-                    done();
-                }
-                else {
-                    done();
-                }
-            };
-
-            var logger = createLogger({ bufferSize: 1, sendIntervalMs: 50000, timeout: 1000, callback: checkResponse });
-
+            var logger = createLogger({ bufferSize: 1, sendIntervalMs: 50000, timeout: 1000 });
+  
             logger.log({ messge: 'hello there from test', testid: 5 });
+            logger.close();
+  
+            setTimeout(function() {
+                 if (!errorAndThenSuccessScope.isDone()) {
+                    done(new Error('pending mocks: ' + errorAndThenSuccessScope.pendingMocks()));
+                } else {
+                    if (extraRequestScope.isDone()) {
+                        done(new Error('We don\'t expect another request'))
+                    } else {
+                        done();
+                    }
+                }
+             }, 10000);
         });
 
     });
@@ -262,10 +316,10 @@ describe('logger', function() {
 
                 done('Expected an error');
             }});
-
-            logger.log({ messge: 'hello there from test', testid: 2 });
-            logger.log({ messge: 'hello there from test2', testid: 2 });
-            logger.log({ messge: 'hello there from test3', testid: 2 });
+            logger.log({messge:"hello there from test", testid:2});
+            logger.log({messge:"hello there from test2", testid:2});
+            logger.log({messge:"hello there from test3", testid:2});
+            logger.close();
         });
     });
 

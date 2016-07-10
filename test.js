@@ -14,4 +14,5 @@ var logger = logzioLogger.createLogger({
     timeout: 1000
 });
 
+console.log('hello');
 logger.log('ssl testing');
