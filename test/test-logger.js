@@ -101,6 +101,34 @@ describe('logger', function() {
             logger._createBulk.restore();
             logger.close();
         });
+
+        it('adds nano seconds when added to options', function(done) {
+            // testing without nano seconds
+            var logger = createLogger({
+                bufferSize:1
+            });
+            sinon.spy(logger, '_createBulk');
+
+            logger.log({ message: 'hello there from test' });
+            assert(!logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano_secs'));
+
+            logger._createBulk.restore();
+            logger.close();
+
+            // testing with nano seconds
+            var logger = createLogger({
+                bufferSize:1,
+                callback: done,
+                addNanoSecs: true
+            });
+            sinon.spy(logger, '_createBulk');
+
+            logger.log({ message: 'hello there from test' });
+            assert(logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano_secs'));
+
+            logger._createBulk.restore();
+            logger.close();
+        });
     });
 
     describe('logs multiple lines', function () {
