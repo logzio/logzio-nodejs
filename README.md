@@ -38,8 +38,12 @@ logger.log(obj);
 * **debug** - Should the logger print debug messages to the console? Default: false
 * **callback** - a callback function called when an unrecoverable error has occured in the logger. The function API is: function(err) - err being the Error object.
 * **timeout** - the read/write/connection timeout in milliseconds.
+* **addTimestampWithNanoSecs** - Add a timestamp with nano seconds granularity. This is needed when many logs are sent in the same millisecond, so you can properly order the logs in kibana. The added timestamp field will be `@timestamp_nano` Default: false
 
 ## Update log
+**0.3.9**
+- Added option to add a timestamp with nano second granularity
+
 **0.3.8**
 - Updated listener url
 - Added `sendAndClose()` method which immediately sends the queued messages and clears the global timer

@@ -119,12 +119,12 @@ describe('logger', function() {
             var logger = createLogger({
                 bufferSize:1,
                 callback: done,
-                addNanoSecs: true
+                addTimestampWithNanoSecs: true
             });
             sinon.spy(logger, '_createBulk');
 
             logger.log({ message: 'hello there from test' });
-            assert(logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano_secs'));
+            assert(logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano'));
 
             logger._createBulk.restore();
             logger.close();
