@@ -1,7 +1,7 @@
 var logzioLogger = require('./index');
 
 var logger = logzioLogger.createLogger({
-    token: 'AJCVqOtantlFUfwlytWMNDmSHgzxxDhJ',
+    token: 'thuqwebLGAmdurgIrDjLlpAptmQqUkxQ',
     type: 'thingk-tenant-app',
     protocol: 'http',
     sendIntervalMs: 3000,
