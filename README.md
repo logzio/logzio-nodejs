@@ -41,6 +41,9 @@ logger.log(obj);
 * **addTimestampWithNanoSecs** - Add a timestamp with nano seconds granularity. This is needed when many logs are sent in the same millisecond, so you can properly order the logs in kibana. The added timestamp field will be `@timestamp_nano` Default: false
 
 ## Update log
+**0.3.10**
+- Fixed issue #17 - sendAndClose() wasn't actually closing the timer
+
 **0.3.9**
 - Added option to add a timestamp with nano second granularity
 
