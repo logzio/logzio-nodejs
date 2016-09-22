@@ -31,7 +31,7 @@ logger.log(obj);
 * **token** 
     Mandatory. Your API logging token. Look it up in the Device Config tab in Logz.io
 * **type** - Log type. Help classify logs into different classifications
-* **protocol** - 'http' or 'https'. Default: http
+* **protocol** - 'http', 'https' or 'udp'. Default: http
 * **sendIntervalMs** - Time in milliseconds to wait between retry attempts. Default: 2000 (2 sec)
 * **bufferSize** - The maximum number of messages the logger will accumulate before sending them all as a bulk. Default: 100.
 * **numberOfRetries** - The maximum number of retry attempts. Default: 3
@@ -41,6 +41,9 @@ logger.log(obj);
 * **addTimestampWithNanoSecs** - Add a timestamp with nano seconds granularity. This is needed when many logs are sent in the same millisecond, so you can properly order the logs in kibana. The added timestamp field will be `@timestamp_nano` Default: false
 
 ## Update log
+**0.3.11**
+- Fixed issue #12 - added support for UDP
+
 **0.3.10**
 - Fixed issue #17 - sendAndClose() wasn't actually closing the timer
 
