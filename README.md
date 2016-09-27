@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/logzio/logzio-nodejs.svg?branch=master)
+![Build Status](https://travis-ci.org/logzio/logzio-nodejs.svg?branch=master)
 
 # logzio-nodejs  
 NodeJS logger for LogzIO. 
