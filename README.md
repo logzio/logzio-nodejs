@@ -1,4 +1,6 @@
-# logzio-nodejs
+[![Build Status](https://travis-ci.org/logzio/logzio-nodejs.svg?branch=master)
+
+# logzio-nodejs  
 NodeJS logger for LogzIO. 
 The logger stashes the log messages you send into an array which is sent as a bulk once it reaches its size limit (100 messages) or time limit (10 sec) in an async fashion.
 It contains a simple retry mechanism which upon connection reset (server side) or client timeout, wait a bit (default interval of 2 seconds), and try this bulk again (it does not block other messages from being accumulated and sent (async). The interval increases by a factor of 2 between each retry, until we reached the maximum allowed attempts (3).
