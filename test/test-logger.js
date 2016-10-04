@@ -351,4 +351,41 @@ describe('logger', function() {
         });
     });
 
+    describe('sending udp', function() {
+        it('sends single log', function(done) {
+            var logger = createLogger({
+                bufferSize: 1,
+                protocol: 'udp'
+            });
+
+            var udpSentCounter = 0;
+            sinon.stub(logger.udpClient, 'send', function() { udpSentCounter++; });
+
+            logger.log('hello from the other side');
+            assert(udpSentCounter === 1);
+
+            logger.close();
+            done();
+        });
+
+        it('sends multiple logs', function(done) {
+            var logger = createLogger({
+                bufferSize: 2,
+                protocol: 'udp'
+            });
+
+            var udpSentCounter = 0;
+            sinon.stub(logger.udpClient, 'send', function() { udpSentCounter++; });
+
+            logger.log('hello from the other side');
+            logger.log('hello from the other side');
+            logger.log('hello from the other side');
+            logger.log('hello from the other side');
+            assert(udpSentCounter === 4);
+
+            logger.close();
+            done();
+        });
+    });
+
 });

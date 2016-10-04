@@ -33,7 +33,7 @@ logger.log(obj);
 * **token** 
     Mandatory. Your API logging token. Look it up in the Device Config tab in Logz.io
 * **type** - Log type. Help classify logs into different classifications
-* **protocol** - 'http' or 'https'. Default: http
+* **protocol** - 'http', 'https' or 'udp'. Default: http
 * **sendIntervalMs** - Time in milliseconds to wait between retry attempts. Default: 2000 (2 sec)
 * **bufferSize** - The maximum number of messages the logger will accumulate before sending them all as a bulk. Default: 100.
 * **numberOfRetries** - The maximum number of retry attempts. Default: 3
@@ -42,7 +42,21 @@ logger.log(obj);
 * **timeout** - the read/write/connection timeout in milliseconds.
 * **addTimestampWithNanoSecs** - Add a timestamp with nano seconds granularity. This is needed when many logs are sent in the same millisecond, so you can properly order the logs in kibana. The added timestamp field will be `@timestamp_nano` Default: false
 
+## Using UDP
+A few notes are worth mentioning regarding the use of the UDP protocol :
+* UDP has some limitations, and therefore it is not the recommended protocol :
+  * There is no guarantee that the logs have been received.
+  * UDP can't take advantage of the bulk api and therefore performance is sub-optimal.
+* When using UDP, each message is being sent separately, and not using the bulk api. This means that the meaning of `bufferSize` is slightly
+different in this case. The messages will still be sent separately, but the logger will wait for the buffer to reach the size specified before
+sending out all the messages. If you want each message to be sent out immediately, then set `bufferSize = 1`.
+
+
 ## Update log
+**0.4.0**
+- Fixed issue #12 - added support for UDP
+- Minor refactorings
+
 **0.3.10**
 - Fixed issue #17 - sendAndClose() wasn't actually closing the timer
 
