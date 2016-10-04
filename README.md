@@ -85,7 +85,7 @@ sending out all the messages. If you want each message to be sent out immediatel
 
 
 
-# Contibutors
+# Scripts
 
 - run `npm install` to install required dependencies
 - run `npm test` to run unit tests
