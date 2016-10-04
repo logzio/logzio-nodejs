@@ -53,6 +53,9 @@ sending out all the messages. If you want each message to be sent out immediatel
 
 
 ## Update log
+**0.4.1**
+- Updated `request` dependency to 2.75.0
+
 **0.4.0**
 - Fixed issue #12 - added support for UDP
 - Minor refactorings
