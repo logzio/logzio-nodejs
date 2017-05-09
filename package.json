@@ -1,18 +1,15 @@
 {
   "name": "logzio-nodejs",
   "description": "A nodejs implementation for sending logs to Logz.IO cloud service",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "author": "Gilly Barr <gilly@logz.io>",
-  "contributors": [
-    {
-      "name": "Gilly Barr",
-      "email": "gillyb@gmail.com"
-    },
-    {
-      "name": "Asaf Mesika",
-      "email": "asaf.mesika@gmail.com"
-    }
-  ],
+  "contributors": [{
+    "name": "Gilly Barr",
+    "email": "gillyb@gmail.com"
+  }, {
+    "name": "Asaf Mesika",
+    "email": "asaf.mesika@gmail.com"
+  }],
   "repository": {
     "type": "git",
     "url": "https://github.com/logzio/logzio-nodejs.git"

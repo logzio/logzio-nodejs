@@ -1,10 +1,10 @@
 ![Build Status](https://travis-ci.org/logzio/logzio-nodejs.svg?branch=master)
 
 # logzio-nodejs  
-NodeJS logger for LogzIO. 
+NodeJS logger for LogzIO.
 The logger stashes the log messages you send into an array which is sent as a bulk once it reaches its size limit (100 messages) or time limit (10 sec) in an async fashion.
 It contains a simple retry mechanism which upon connection reset (server side) or client timeout, wait a bit (default interval of 2 seconds), and try this bulk again (it does not block other messages from being accumulated and sent (async). The interval increases by a factor of 2 between each retry, until we reached the maximum allowed attempts (3).
- 
+
  By default any error is logged to the console. This can be changed by supplying a callback function.
 
 
@@ -20,8 +20,8 @@ var logger = require('logzio-nodejs').createLogger({
 logger.log('This is a log message');
 
 // sending an object
-var obj = { 
-    message: 'Some log message', 
+var obj = {
+    message: 'Some log message',
     param1: 'val1',
     param2: 'val2'
 };
@@ -30,7 +30,7 @@ logger.log(obj);
 
 ## Options
 
-* **token** 
+* **token**
     Mandatory. Your API logging token. Look it up in the Device Config tab in Logz.io
 * **type** - Log type. Help classify logs into different classifications
 * **protocol** - 'http', 'https' or 'udp'. Default: http
@@ -52,7 +52,10 @@ different in this case. The messages will still be sent separately, but the logg
 sending out all the messages. If you want each message to be sent out immediately, then set `bufferSize = 1`.
 
 
-## Update log
+## Update log  
+**0.4.3**  
+- Add the `@timestamp` field to the logs on the client's machine (and not when it reaches the server)
+
 **0.4.1**
 - Updated `request` dependency to 2.75.0
 
