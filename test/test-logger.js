@@ -3,6 +3,7 @@ var logzioLogger = require('../lib/logzio-nodejs.js');
 var request = require('request');
 var nock = require('nock');
 var assert = require('assert');
+var moment = require('moment');
 
 var dummyHost = 'logz.io';
 var nockHttpAddress = 'http://' + dummyHost + ':8070';
@@ -127,6 +128,37 @@ describe('logger', function() {
             assert(logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano'));
 
             logger._createBulk.restore();
+            logger.close();
+        });
+        it('writes a log message without @timestamp', function(done) {
+            var logger = createLogger({
+                // buffer is 2 so we could access the log before we send it, to analyze it
+                bufferSize:2,
+                callback: done
+            });
+
+            var fakeTime = moment("2011-09-01").valueOf();
+
+            // Fake the current time, so we could test on it
+            var clock = sinon.useFakeTimers(fakeTime);
+            logger.log({ message: 'hello there from test' });
+            clock.restore();
+
+            assert.equal(fakeTime, moment(logger.messages[logger.messages.length-1]['@timestamp'].valueOf()));
+            logger.close();
+        });
+        it.only('writes a log message with a custom @timestamp', function(done) {
+            var logger = createLogger({
+                // buffer is 2 so we could access the log before we send it, to analyze it
+                bufferSize:2,
+                callback: done
+            });
+
+            var fakeTime = moment("2011-09-01");
+
+            logger.log({ message: 'hello there from test', '@timestamp': fakeTime.format()});
+
+            assert.equal(fakeTime.format(), logger.messages[logger.messages.length-1]['@timestamp']);
             logger.close();
         });
     });
