@@ -52,7 +52,10 @@ different in this case. The messages will still be sent separately, but the logg
 sending out all the messages. If you want each message to be sent out immediately, then set `bufferSize = 1`.
 
 
-## Update log  
+## Update log
+**0.4.4**  
+- `@timestamp` and `@timestamp_nano` will no longer be overriden given a custom value by the user. 
+
 **0.4.3**  
 - Add the `@timestamp` field to the logs on the client's machine (and not when it reaches the server)
 
