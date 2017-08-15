@@ -33,14 +33,16 @@ logger.log(obj);
 * **token**
     Mandatory. Your API logging token. Look it up in the Device Config tab in Logz.io
 * **type** - Log type. Help classify logs into different classifications
-* **protocol** - 'http', 'https' or 'udp'. Default: http
-* **sendIntervalMs** - Time in milliseconds to wait between retry attempts. Default: 2000 (2 sec)
-* **bufferSize** - The maximum number of messages the logger will accumulate before sending them all as a bulk. Default: 100.
-* **numberOfRetries** - The maximum number of retry attempts. Default: 3
-* **debug** - Should the logger print debug messages to the console? Default: false
-* **callback** - a callback function called when an unrecoverable error has occured in the logger. The function API is: function(err) - err being the Error object.
-* **timeout** - the read/write/connection timeout in milliseconds.
-* **addTimestampWithNanoSecs** - Add a timestamp with nano seconds granularity. This is needed when many logs are sent in the same millisecond, so you can properly order the logs in kibana. The added timestamp field will be `@timestamp_nano` Default: false
+* **protocol** - `http`, `https` or `udp`. Default: `http`
+* **host** - Destination host name. Default: `listener.logz.io`
+* **port** - Destination port. Default port depends on protocol. For `udp` default port is `5050`, for `http` is `8070` and `8071` is for `https`
+* **sendIntervalMs** - Time in milliseconds to wait between retry attempts. Default: `2000` (2 sec)
+* **bufferSize** - The maximum number of messages the logger will accumulate before sending them all as a bulk. Default: `100`.
+* **numberOfRetries** - The maximum number of retry attempts. Default: `3`
+* **debug** - Should the logger print debug messages to the console? Default: `false`
+* **callback** - A callback function called when an unrecoverable error has occured in the logger. The function API is: function(err) - err being the Error object.
+* **timeout** - The read/write/connection timeout in milliseconds.
+* **addTimestampWithNanoSecs** - Add a timestamp with nano seconds granularity. This is needed when many logs are sent in the same millisecond, so you can properly order the logs in kibana. The added timestamp field will be `@timestamp_nano` Default: `false`
 
 ## Using UDP
 A few notes are worth mentioning regarding the use of the UDP protocol :
