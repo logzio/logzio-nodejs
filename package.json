@@ -1,7 +1,7 @@
 {
   "name": "logzio-nodejs",
   "description": "A nodejs implementation for sending logs to Logz.IO cloud service",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "author": "Gilly Barr <gilly@logz.io>",
   "contributors": [
     {
@@ -11,6 +11,10 @@
     {
       "name": "Asaf Mesika",
       "email": "asaf.mesika@gmail.com"
+    },
+    {
+      "name": "Alon Mizrahi",
+      "email": "alonmizra@gmail.com"
     },
     {
       "name": "Amir Tugendhaft",
