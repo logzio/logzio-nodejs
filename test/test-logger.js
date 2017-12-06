@@ -147,7 +147,7 @@ describe('logger', function() {
             assert.equal(fakeTime, moment(logger.messages[logger.messages.length-1]['@timestamp'].valueOf()));
             logger.close();
         });
-        it.only('writes a log message with a custom @timestamp', function(done) {
+        it('writes a log message with a custom @timestamp', function(done) {
             var logger = createLogger({
                 // buffer is 2 so we could access the log before we send it, to analyze it
                 bufferSize:2,
