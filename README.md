@@ -32,7 +32,7 @@ logger.log(obj);
 
 * **token**
     Mandatory. Your API logging token. Look it up in the Device Config tab in Logz.io
-* **type** - Log type. Help classify logs into different classifications
+* **type** - Log type. Help classify logs into different classifications, this must not contain any spaces.
 * **protocol** - 'http', 'https' or 'udp'. Default: http
 * **sendIntervalMs** - Time in milliseconds to wait between retry attempts. Default: 2000 (2 sec)
 * **bufferSize** - The maximum number of messages the logger will accumulate before sending them all as a bulk. Default: 100.
