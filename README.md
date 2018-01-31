@@ -40,7 +40,7 @@ logger.log(obj);
 * **debug** - Should the logger print debug messages to the console? Default: false
 * **callback** - a callback function called when an unrecoverable error has occured in the logger. The function API is: function(err) - err being the Error object.
 * **timeout** - the read/write/connection timeout in milliseconds.
-* **addTimestampWithNanoSecs** - Add a timestamp with nano seconds granularity. This is needed when many logs are sent in the same millisecond, so you can properly order the logs in kibana. The added timestamp field will be `@timestamp_nano` Default: false  **NOTE:**  Elasticsearch date fields only supports timestamp to milliseconds, so this field can not be mapped as a date field it can only be mapped as a string and used for sortin the logs. 
+* **addTimestampWithNanoSecs** - Add a timestamp with nano seconds granularity. This is needed when many logs are sent in the same millisecond, so you can properly order the logs in kibana. The added timestamp field will be `@timestamp_nano` Default: false  **NOTE:**  Elasticsearch date fields only supports timestamp accuracy to milliseconds, as a result this field can not be mapped as a date field it can only be mapped as a string and used for sorting the logs. 
 
 ## Using UDP
 A few notes are worth mentioning regarding the use of the UDP protocol :
