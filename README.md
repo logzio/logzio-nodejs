@@ -32,7 +32,7 @@ logger.log(obj);
 
 * **token**
     Mandatory. Your API logging token. Look it up in the Device Config tab in Logz.io
-* **type** - Log type. Help classify logs into different classifications
+* **type** - Log type. Help classify logs into different classifications, this must not contain any spaces.
 * **protocol** - 'http', 'https' or 'udp'. Default: http
 * **sendIntervalMs** - Time in milliseconds to wait between retry attempts. Default: 2000 (2 sec)
 * **bufferSize** - The maximum number of messages the logger will accumulate before sending them all as a bulk. Default: 100.
@@ -40,7 +40,7 @@ logger.log(obj);
 * **debug** - Should the logger print debug messages to the console? Default: false
 * **callback** - a callback function called when an unrecoverable error has occured in the logger. The function API is: function(err) - err being the Error object.
 * **timeout** - the read/write/connection timeout in milliseconds.
-* **addTimestampWithNanoSecs** - Add a timestamp with nano seconds granularity. This is needed when many logs are sent in the same millisecond, so you can properly order the logs in kibana. The added timestamp field will be `@timestamp_nano` Default: false
+* **addTimestampWithNanoSecs** - Add a timestamp with nano seconds granularity. This is needed when many logs are sent in the same millisecond, so you can properly order the logs in kibana. The added timestamp field will be `@timestamp_nano` Default: false  **NOTE:**  Elasticsearch date fields only supports timestamp accuracy to milliseconds, as a result this field can not be mapped as a date field it can only be mapped as a string and used for sorting the logs. 
 
 ## Using UDP
 A few notes are worth mentioning regarding the use of the UDP protocol :
@@ -53,6 +53,9 @@ sending out all the messages. If you want each message to be sent out immediatel
 
 
 ## Update log
+**0.4.6**  
+- Updated moment (v2.19.3) and request (v2.81.0) packages 
+
 **0.4.4**  
 - `@timestamp` and `@timestamp_nano` will no longer be overriden given a custom value by the user. 
 
