@@ -1,7 +1,7 @@
 {
   "name": "logzio-nodejs",
   "description": "A nodejs implementation for sending logs to Logz.IO cloud service",
-  "version": "0.4.5",
+  "version": "0.4.12",
   "author": "Gilly Barr <gilly@logz.io>",
   "contributors": [
     {
@@ -11,6 +11,10 @@
     {
       "name": "Asaf Mesika",
       "email": "asaf.mesika@gmail.com"
+    },
+    {
+      "name": "Alon Mizrahi",
+      "email": "alonmizra@gmail.com"
     },
     {
       "name": "Amir Tugendhaft",
@@ -29,13 +33,13 @@
     "logzio"
   ],
   "dependencies": {
-    "json-stringify-safe": "5.0.x",
+    "json-stringify-safe": "5.0.1",
     "lodash.assign": "4.2.0",
-    "moment": "^2.18.1",
-    "request": "2.75.0"
+    "moment": "^2.22.1",
+    "request": "^2.87.0"
   },
   "devDependencies": {
-    "assert": "^1.3.0",
+    "assert": "^1.4.1",
     "async": "1.4.2",
     "mocha": "^2.3.3",
     "nock": "^2.13.0",

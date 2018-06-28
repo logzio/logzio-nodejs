@@ -55,6 +55,12 @@ sending out all the messages. If you want each message to be sent out immediatel
 
 
 ## Update log
+**0.4.12**  
+- Updated ability to add custom port
+
+**0.4.6**  
+- Updated moment (v2.19.3) and request (v2.81.0) packages 
+
 **0.4.4**  
 - `@timestamp` and `@timestamp_nano` will no longer be overriden given a custom value by the user. 
 
