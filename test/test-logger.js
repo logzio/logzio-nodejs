@@ -1,4 +1,4 @@
-var sinon  = require('sinon');
+var sinon = require('sinon');
 var logzioLogger = require('../lib/logzio-nodejs.js');
 var request = require('request');
 var nock = require('nock');
@@ -8,7 +8,7 @@ var moment = require('moment');
 var dummyHost = 'logz.io';
 var nockHttpAddress = 'http://' + dummyHost + ':8070';
 
-var createLogger = function(options) {
+var createLogger = function (options) {
     var myoptions = options;
     myoptions.token = 'acrSGIefherhsZYOpzxeGBpTyqgSzaMk';
     myoptions.type = 'testnode';
@@ -19,17 +19,17 @@ var createLogger = function(options) {
 };
 
 
-describe('logger', function() {
+describe('logger', function () {
 
     describe('logs a single line', function () {
-        before(function(done){
+        before(function (done) {
             sinon
                 .stub(request, 'post')
-                .yields(null, {statusCode: 200}, '');
+                .yields(null, { statusCode: 200 }, '');
             done();
         });
 
-        after(function(done){
+        after(function (done) {
             request.post.restore();
             done();
         });
@@ -38,7 +38,7 @@ describe('logger', function() {
 
             var logger;
             logger = createLogger({
-                bufferSize: 1, 
+                bufferSize: 1,
                 callback: done
             });
             sinon.spy(logger, '_createBulk');
@@ -51,11 +51,11 @@ describe('logger', function() {
             logger.close();
         });
 
-        it('sends log as a string with extra fields', function(done) {
+        it('sends log as a string with extra fields', function (done) {
             var logger = createLogger({
-                bufferSize:1,
+                bufferSize: 1,
                 callback: done,
-                extraFields:{
+                extraFields: {
                     extraField1: 'val1',
                     extraField2: 'val2'
                 }
@@ -72,7 +72,7 @@ describe('logger', function() {
         });
 
         it('sends log as an object', function (done) {
-            var logger = createLogger({bufferSize:1, callback: done});
+            var logger = createLogger({ bufferSize: 1, callback: done });
             sinon.spy(logger, '_createBulk');
 
             var logMsg = { message: 'hello there from test' };
@@ -83,11 +83,11 @@ describe('logger', function() {
             logger.close();
         });
 
-        it('sends log as an object with extra fields', function(done) {
+        it('sends log as an object with extra fields', function (done) {
             var logger = createLogger({
-                bufferSize:1,
+                bufferSize: 1,
                 callback: done,
-                extraFields:{
+                extraFields: {
                     extraField1: 'val1',
                     extraField2: 'val2'
                 }
@@ -103,10 +103,10 @@ describe('logger', function() {
             logger.close();
         });
 
-        it('adds nano seconds when added to options', function(done) {
+        it('adds nano seconds when added to options', function (done) {
             // testing without nano seconds
             var logger = createLogger({
-                bufferSize:1
+                bufferSize: 1
             });
             sinon.spy(logger, '_createBulk');
 
@@ -117,8 +117,8 @@ describe('logger', function() {
             logger.close();
 
             // testing with nano seconds
-            var logger = createLogger({
-                bufferSize:1,
+            logger = createLogger({
+                bufferSize: 1,
                 callback: done,
                 addTimestampWithNanoSecs: true
             });
@@ -130,54 +130,54 @@ describe('logger', function() {
             logger._createBulk.restore();
             logger.close();
         });
-        it('writes a log message without @timestamp', function(done) {
+        it('writes a log message without @timestamp', function (done) {
             var logger = createLogger({
                 // buffer is 2 so we could access the log before we send it, to analyze it
-                bufferSize:2,
+                bufferSize: 2,
                 callback: done
             });
 
-            var fakeTime = moment("2011-09-01").valueOf();
+            var fakeTime = moment('2011-09-01').valueOf();
 
             // Fake the current time, so we could test on it
             var clock = sinon.useFakeTimers(fakeTime);
             logger.log({ message: 'hello there from test' });
             clock.restore();
 
-            assert.equal(fakeTime, moment(logger.messages[logger.messages.length-1]['@timestamp'].valueOf()));
+            assert.equal(fakeTime, moment(logger.messages[logger.messages.length - 1]['@timestamp'].valueOf()));
             logger.close();
         });
-        it('writes a log message with a custom @timestamp', function(done) {
+        it('writes a log message with a custom @timestamp', function (done) {
             var logger = createLogger({
                 // buffer is 2 so we could access the log before we send it, to analyze it
-                bufferSize:2,
+                bufferSize: 2,
                 callback: done
             });
 
-            var fakeTime = moment("2011-09-01");
+            var fakeTime = moment('2011-09-01');
 
-            logger.log({ message: 'hello there from test', '@timestamp': fakeTime.format()});
+            logger.log({ message: 'hello there from test', '@timestamp': fakeTime.format() });
 
-            assert.equal(fakeTime.format(), logger.messages[logger.messages.length-1]['@timestamp']);
+            assert.equal(fakeTime.format(), logger.messages[logger.messages.length - 1]['@timestamp']);
             logger.close();
         });
     });
 
     describe('logs multiple lines', function () {
-        before(function(done){
+        before(function (done) {
             sinon
                 .stub(request, 'post')
-                .yields(null, {statusCode: 200} , '');
+                .yields(null, { statusCode: 200 }, '');
             done();
         });
 
-        after(function(done){
+        after(function (done) {
             request.post.restore();
             done();
         });
 
         it('Send multiple lines', function (done) {
-            
+
             var logger = createLogger({ bufferSize: 3, callback: done });
 
             logger.log({ messge: 'hello there from test', testid: 2 });
@@ -194,16 +194,15 @@ describe('logger', function() {
             function assertCalled() {
                 timesCalled++;
 
-                if (expectedTimes == timesCalled)
+                if (expectedTimes == timesCalled) {
                     done();
-                else if (timesCalled > expectedTimes) {
-                    fail('called more than expected');
-                    done();
+                } else if (timesCalled > expectedTimes) {
+                    throw 'called more than expected';
                 }
             }
 
             var logger = createLogger({
-                bufferSize: 3, 
+                bufferSize: 3,
                 callback: assertCalled
             });
 
@@ -219,39 +218,39 @@ describe('logger', function() {
     });
 
     describe('#log-closing', function () {
-        before(function(done){
+        before(function (done) {
             sinon
                 .stub(request, 'post')
-                .yields(null, {statusCode: 200} , "");
+                .yields(null, { statusCode: 200 }, '');
             done();
         });
 
-        after(function(done){
+        after(function (done) {
             request.post.restore();
             done();
         });
 
         it('Don\'t allow logs after closing', function (done) {
-            var logger = createLogger({bufferSize:1});
+            var logger = createLogger({ bufferSize: 1 });
             logger.close();
             try {
-              logger.log({messge:"hello there from test"});
-              done("Expected an error when logging into a closed log!");
+                logger.log({ messge: 'hello there from test' });
+                done('Expected an error when logging into a closed log!');
             } catch (ex) {
-              done();
+                done();
             }
         });
     });
 
     describe('timers', function () {
-        before(function(done){
+        before(function (done) {
             sinon
                 .stub(request, 'post')
-                .yields(null, {statusCode: 200} , "");
+                .yields(null, { statusCode: 200 }, '');
             done();
         });
 
-        after(function(done){
+        after(function (done) {
             request.post.restore();
             done();
         });
@@ -267,8 +266,9 @@ describe('logger', function() {
                 if (expectedTimes == timesCalled)
                     done();
             }
-            var logger = createLogger({ 
-                bufferSize: 100, 
+
+            var logger = createLogger({
+                bufferSize: 100,
                 callback: assertCalled,
                 sendIntervalMs: 5000
             });
@@ -279,15 +279,15 @@ describe('logger', function() {
             logger.log({ messge: 'hello there from test3', testid: 5 });
 
             // Schedule 100 msgs (buffer size) which should be sent in one bulk 11 seconds from start
-            setTimeout(function() {
+            setTimeout(function () {
                 for (var i = 0; i < 100; i++) {
-                    logger.log({ 
-                        messge: 'hello there from test', 
-                        testid: 6 
+                    logger.log({
+                        messge: 'hello there from test',
+                        testid: 6
                     });
                 }
                 logger.close();
-            }, 6000)
+            }, 6000);
 
         });
     });
@@ -298,7 +298,7 @@ describe('logger', function() {
         var errorAndThenSuccessScope;
         var extraRequestScope;
 
-        before(function(done){
+        before(function (done) {
             nock.cleanAll();
             errorAndThenSuccessScope = nock(nockHttpAddress)
                 .post('/')
@@ -315,7 +315,7 @@ describe('logger', function() {
                 .reply(200, '');
 
             extraRequestScope = nock(nockHttpAddress)
-                .filteringPath(function() {
+                .filteringPath(function () {
                     return '/';
                 })
                 .post('/')
@@ -325,7 +325,7 @@ describe('logger', function() {
             done();
         });
 
-        after(function(done){
+        after(function (done) {
             nock.restore();
             nock.cleanAll();
             done();
@@ -335,89 +335,53 @@ describe('logger', function() {
             // very small timeout so the first request will fail (nock setup this way above) and
             // then second attempt will succeed
             var logger = createLogger({ bufferSize: 1, sendIntervalMs: 50000, timeout: 1000 });
-  
+
             logger.log({ messge: 'hello there from test', testid: 5 });
             logger.close();
-  
-            setTimeout(function() {
-                 if (!errorAndThenSuccessScope.isDone()) {
+
+            setTimeout(function () {
+                if (!errorAndThenSuccessScope.isDone()) {
                     done(new Error('pending mocks: ' + errorAndThenSuccessScope.pendingMocks()));
                 } else {
                     if (extraRequestScope.isDone()) {
-                        done(new Error('We don\'t expect another request'))
+                        done(new Error('We don\'t expect another request'));
                     } else {
                         done();
                     }
                 }
-             }, 10000);
+            }, 10000);
         });
 
     });
 
     describe('bad request', function () {
-        before(function(done){
+        before(function (done) {
             sinon
                 .stub(request, 'post')
-                .yields(null, {statusCode: 400} , "bad");
+                .yields(null, { statusCode: 400 }, 'bad');
             done();
         });
 
-        after(function(done){
+        after(function (done) {
             request.post.restore();
             done();
         });
 
         it('bad request test', function (done) {
-            var logger = createLogger({bufferSize:3, callback: function(err) {
-                if (err) {
-                    done();
-                    return;
+            var logger = createLogger({
+                bufferSize: 3, callback: function (err) {
+                    if (err) {
+                        done();
+                        return;
+                    }
+
+                    done('Expected an error');
                 }
-
-                done('Expected an error');
-            }});
-            logger.log({messge:"hello there from test", testid:2});
-            logger.log({messge:"hello there from test2", testid:2});
-            logger.log({messge:"hello there from test3", testid:2});
+            });
+            logger.log({ messge: 'hello there from test', testid: 2 });
+            logger.log({ messge: 'hello there from test2', testid: 2 });
+            logger.log({ messge: 'hello there from test3', testid: 2 });
             logger.close();
         });
     });
-
-    describe('sending udp', function() {
-        it('sends single log', function(done) {
-            var logger = createLogger({
-                bufferSize: 1,
-                protocol: 'udp'
-            });
-
-            var udpSentCounter = 0;
-            sinon.stub(logger.udpClient, 'send', function() { udpSentCounter++; });
-
-            logger.log('hello from the other side');
-            assert(udpSentCounter === 1);
-
-            logger.close();
-            done();
-        });
-
-        it('sends multiple logs', function(done) {
-            var logger = createLogger({
-                bufferSize: 2,
-                protocol: 'udp'
-            });
-
-            var udpSentCounter = 0;
-            sinon.stub(logger.udpClient, 'send', function() { udpSentCounter++; });
-
-            logger.log('hello from the other side');
-            logger.log('hello from the other side');
-            logger.log('hello from the other side');
-            logger.log('hello from the other side');
-            assert(udpSentCounter === 4);
-
-            logger.close();
-            done();
-        });
-    });
-
 });

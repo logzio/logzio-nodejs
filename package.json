@@ -1,7 +1,7 @@
 {
   "name": "logzio-nodejs",
   "description": "A nodejs implementation for sending logs to Logz.IO cloud service",
-  "version": "0.4.13",
+  "version": "0.4.14",
   "author": "Gilly Barr <gilly@logz.io>",
   "contributors": [
     {
@@ -41,6 +41,7 @@
   "devDependencies": {
     "assert": "^1.4.1",
     "async": "1.4.2",
+    "eslint": "^5.0.1",
     "mocha": "^5.2.0",
     "nock": "^9.4.0",
     "should": "^7.1.0",

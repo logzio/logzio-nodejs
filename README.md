@@ -55,6 +55,10 @@ sending out all the messages. If you want each message to be sent out immediatel
 
 
 ## Update log
+**0.4.14**  
+- UDP callback bug fix + tests
+- UDP close connection bug fix + tests
+
 **0.4.12**  
 - Updated ability to add custom port
 
