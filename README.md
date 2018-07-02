@@ -58,6 +58,7 @@ sending out all the messages. If you want each message to be sent out immediatel
 **0.4.14**  
 - UDP callback bug fix + tests
 - UDP close connection bug fix + tests
+- ESLint
 
 **0.4.12**  
 - Updated ability to add custom port
