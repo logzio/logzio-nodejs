@@ -90,5 +90,6 @@ describe('sending udp', function () {
         });
 
         logger.log('hello from the other side');
+        logger.sendAndClose();
     });
 });
