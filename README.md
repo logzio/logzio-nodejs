@@ -28,6 +28,8 @@ var obj = {
 logger.log(obj);
 ```
 
+**Notice**, if logzio-js is used as part of a serverless service then add logger.sendAndClose() at the end of the run.
+
 ## Options
 
 * **token**
