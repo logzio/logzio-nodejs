@@ -28,6 +28,8 @@ var obj = {
 logger.log(obj);
 ```
 
+**Note:** If logzio-js is used as part of a serverless service (AWS Lambda, Azure Functions, Google Cloud Functions, etc.), add `logger.sendAndClose()` at the end of the run.
+
 ## Options
 
 * **token**
