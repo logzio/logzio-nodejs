@@ -1,11 +1,11 @@
 ![Build Status](https://travis-ci.org/logzio/logzio-nodejs.svg?branch=master)
 
 # logzio-nodejs  
-NodeJS logger for LogzIO.
+NodeJS logger for Logz.io.
 The logger stashes the log messages you send into an array which is sent as a bulk once it reaches its size limit (100 messages) or time limit (10 sec) in an async fashion.
-It contains a simple retry mechanism which upon connection reset (server side) or client timeout, wait a bit (default interval of 2 seconds), and try this bulk again (it does not block other messages from being accumulated and sent (async). The interval increases by a factor of 2 between each retry, until we reached the maximum allowed attempts (3).
+It contains a simple retry mechanism which upon connection reset (server side) or client timeout, wait a bit (default interval of 2 seconds), and try this bulk again. It does not block other messages from being accumulated and sent (async). The interval increases by a factor of 2 between each retry until it reaches the maximum allowed attempts (3).
 
- By default any error is logged to the console. This can be changed by supplying a callback function.
+ By default, any error is logged to the console. This can be changed by supplying a callback function.
 
 
 ## Sample usage
@@ -47,13 +47,11 @@ logger.log(obj);
 * **addTimestampWithNanoSecs** - Add a timestamp with nano seconds granularity. This is needed when many logs are sent in the same millisecond, so you can properly order the logs in kibana. The added timestamp field will be `@timestamp_nano` Default: `false`
 
 ## Using UDP
-A few notes are worth mentioning regarding the use of the UDP protocol :
-* UDP has some limitations, and therefore it is not the recommended protocol :
+A few notes are worth mentioning regarding the use of the UDP protocol:
+* UDP has some limitations, and therefore it is not the recommended protocol:
   * There is no guarantee that the logs have been received.
-  * UDP can't take advantage of the bulk api and therefore performance is sub-optimal.
-* When using UDP, each message is being sent separately, and not using the bulk api. This means that the meaning of `bufferSize` is slightly
-different in this case. The messages will still be sent separately, but the logger will wait for the buffer to reach the size specified before
-sending out all the messages. If you want each message to be sent out immediately, then set `bufferSize = 1`.
+  * UDP can't take advantage of the bulk API, so performance is sub-optimal.
+* When using UDP, each message is sent separately, and not using the bulk API. This means that the meaning of `bufferSize` is slightly different in this case. The messages will still be sent separately, but the logger will wait for the buffer to reach the size specified before sending out all the messages. If you want each message to be sent out immediately, then set `bufferSize = 1`.
 
 
 ## Update log
