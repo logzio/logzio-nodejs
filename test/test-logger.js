@@ -10,7 +10,7 @@ var nockHttpAddress = 'http://' + dummyHost + ':8070';
 
 var createLogger = function (options) {
     var myoptions = options;
-    myoptions.token = 'acrSGIefherhsZYOpzxeGBpTyqgSzaMk';
+    myoptions.token = 'testToken';
     myoptions.type = 'testnode';
     myoptions.debug = true;
     myoptions.host = dummyHost;
@@ -25,7 +25,9 @@ describe('logger', function () {
         before(function (done) {
             sinon
                 .stub(request, 'post')
-                .yields(null, { statusCode: 200 }, '');
+                .yields(null, {
+                    statusCode: 200
+                }, '');
             done();
         });
 
@@ -72,12 +74,36 @@ describe('logger', function () {
         });
 
         it('sends log as an object', function (done) {
-            var logger = createLogger({ bufferSize: 1, callback: done });
+            var logger = createLogger({
+                bufferSize: 1,
+                callback: done
+            });
             sinon.spy(logger, '_createBulk');
 
-            var logMsg = { message: 'hello there from test' };
+            var logMsg = {
+                message: 'hello there from test'
+            };
             logger.log(logMsg);
             assert(logger._createBulk.getCall(0).args[0][0].message == logMsg.message);
+
+            logger._createBulk.restore();
+            logger.close();
+        });
+
+        it('sends log as an object with type', function (done) {
+            var logger = createLogger({
+                bufferSize: 1,
+                callback: done
+            });
+            sinon.spy(logger, '_createBulk');
+
+            var logMsg = {
+                message: 'hello there from test',
+                type: 'myTestType'
+            };
+            logger.log(logMsg);
+            assert(logger._createBulk.getCall(0).args[0][0].message == logMsg.message);
+            assert(logger._createBulk.getCall(0).args[0][0].type == logMsg.type);
 
             logger._createBulk.restore();
             logger.close();
@@ -94,7 +120,9 @@ describe('logger', function () {
             });
             sinon.spy(logger, '_createBulk');
 
-            var logMsg = { message: 'hello there from test' };
+            var logMsg = {
+                message: 'hello there from test'
+            };
             logger.log(logMsg);
             assert(logger._createBulk.getCall(0).args[0][0].extraField1 == 'val1');
             assert(logger._createBulk.getCall(0).args[0][0].extraField2 == 'val2');
@@ -110,7 +138,9 @@ describe('logger', function () {
             });
             sinon.spy(logger, '_createBulk');
 
-            logger.log({ message: 'hello there from test' });
+            logger.log({
+                message: 'hello there from test'
+            });
             assert(!logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano_secs'));
 
             logger._createBulk.restore();
@@ -124,7 +154,9 @@ describe('logger', function () {
             });
             sinon.spy(logger, '_createBulk');
 
-            logger.log({ message: 'hello there from test' });
+            logger.log({
+                message: 'hello there from test'
+            });
             assert(logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano'));
 
             logger._createBulk.restore();
@@ -141,7 +173,9 @@ describe('logger', function () {
 
             // Fake the current time, so we could test on it
             var clock = sinon.useFakeTimers(fakeTime);
-            logger.log({ message: 'hello there from test' });
+            logger.log({
+                message: 'hello there from test'
+            });
             clock.restore();
 
             assert.equal(fakeTime, moment(logger.messages[logger.messages.length - 1]['@timestamp'].valueOf()));
@@ -156,7 +190,10 @@ describe('logger', function () {
 
             var fakeTime = moment('2011-09-01');
 
-            logger.log({ message: 'hello there from test', '@timestamp': fakeTime.format() });
+            logger.log({
+                message: 'hello there from test',
+                '@timestamp': fakeTime.format()
+            });
 
             assert.equal(fakeTime.format(), logger.messages[logger.messages.length - 1]['@timestamp']);
             logger.close();
@@ -167,7 +204,9 @@ describe('logger', function () {
         before(function (done) {
             sinon
                 .stub(request, 'post')
-                .yields(null, { statusCode: 200 }, '');
+                .yields(null, {
+                    statusCode: 200
+                }, '');
             done();
         });
 
@@ -178,11 +217,23 @@ describe('logger', function () {
 
         it('Send multiple lines', function (done) {
 
-            var logger = createLogger({ bufferSize: 3, callback: done });
+            var logger = createLogger({
+                bufferSize: 3,
+                callback: done
+            });
 
-            logger.log({ messge: 'hello there from test', testid: 2 });
-            logger.log({ messge: 'hello there from test2', testid: 2 });
-            logger.log({ messge: 'hello there from test3', testid: 2 });
+            logger.log({
+                messge: 'hello there from test',
+                testid: 2
+            });
+            logger.log({
+                messge: 'hello there from test2',
+                testid: 2
+            });
+            logger.log({
+                messge: 'hello there from test3',
+                testid: 2
+            });
 
             logger.close();
         });
@@ -206,12 +257,30 @@ describe('logger', function () {
                 callback: assertCalled
             });
 
-            logger.log({ messge: 'hello there from test', testid: 4 });
-            logger.log({ messge: 'hello there from test2', testid: 4 });
-            logger.log({ messge: 'hello there from test3', testid: 4 });
-            logger.log({ messge: 'hello there from test', testid: 4 });
-            logger.log({ messge: 'hello there from test2', testid: 4 });
-            logger.log({ messge: 'hello there from test3', testid: 4 });
+            logger.log({
+                messge: 'hello there from test',
+                testid: 4
+            });
+            logger.log({
+                messge: 'hello there from test2',
+                testid: 4
+            });
+            logger.log({
+                messge: 'hello there from test3',
+                testid: 4
+            });
+            logger.log({
+                messge: 'hello there from test',
+                testid: 4
+            });
+            logger.log({
+                messge: 'hello there from test2',
+                testid: 4
+            });
+            logger.log({
+                messge: 'hello there from test3',
+                testid: 4
+            });
 
             logger.close();
         });
@@ -221,7 +290,9 @@ describe('logger', function () {
         before(function (done) {
             sinon
                 .stub(request, 'post')
-                .yields(null, { statusCode: 200 }, '');
+                .yields(null, {
+                    statusCode: 200
+                }, '');
             done();
         });
 
@@ -231,10 +302,14 @@ describe('logger', function () {
         });
 
         it('Don\'t allow logs after closing', function (done) {
-            var logger = createLogger({ bufferSize: 1 });
+            var logger = createLogger({
+                bufferSize: 1
+            });
             logger.close();
             try {
-                logger.log({ messge: 'hello there from test' });
+                logger.log({
+                    messge: 'hello there from test'
+                });
                 done('Expected an error when logging into a closed log!');
             } catch (ex) {
                 done();
@@ -246,7 +321,9 @@ describe('logger', function () {
         before(function (done) {
             sinon
                 .stub(request, 'post')
-                .yields(null, { statusCode: 200 }, '');
+                .yields(null, {
+                    statusCode: 200
+                }, '');
             done();
         });
 
@@ -274,9 +351,18 @@ describe('logger', function () {
             });
 
             // These messages should be sent in 1 bulk 10 seconds from now (due to sendIntervalMs)
-            logger.log({ messge: 'hello there from test', testid: 5 });
-            logger.log({ messge: 'hello there from test2', testid: 5 });
-            logger.log({ messge: 'hello there from test3', testid: 5 });
+            logger.log({
+                messge: 'hello there from test',
+                testid: 5
+            });
+            logger.log({
+                messge: 'hello there from test2',
+                testid: 5
+            });
+            logger.log({
+                messge: 'hello there from test3',
+                testid: 5
+            });
 
             // Schedule 100 msgs (buffer size) which should be sent in one bulk 11 seconds from start
             setTimeout(function () {
@@ -334,9 +420,16 @@ describe('logger', function () {
         it('Msgs are only sent once', function (done) {
             // very small timeout so the first request will fail (nock setup this way above) and
             // then second attempt will succeed
-            var logger = createLogger({ bufferSize: 1, sendIntervalMs: 50000, timeout: 1000 });
+            var logger = createLogger({
+                bufferSize: 1,
+                sendIntervalMs: 50000,
+                timeout: 1000
+            });
 
-            logger.log({ messge: 'hello there from test', testid: 5 });
+            logger.log({
+                messge: 'hello there from test',
+                testid: 5
+            });
             logger.close();
 
             setTimeout(function () {
@@ -358,7 +451,9 @@ describe('logger', function () {
         before(function (done) {
             sinon
                 .stub(request, 'post')
-                .yields(null, { statusCode: 400 }, 'bad');
+                .yields(null, {
+                    statusCode: 400
+                }, 'bad');
             done();
         });
 
@@ -369,7 +464,8 @@ describe('logger', function () {
 
         it('bad request test', function (done) {
             var logger = createLogger({
-                bufferSize: 3, callback: function (err) {
+                bufferSize: 3,
+                callback: function (err) {
                     if (err) {
                         done();
                         return;
@@ -378,9 +474,18 @@ describe('logger', function () {
                     done('Expected an error');
                 }
             });
-            logger.log({ messge: 'hello there from test', testid: 2 });
-            logger.log({ messge: 'hello there from test2', testid: 2 });
-            logger.log({ messge: 'hello there from test3', testid: 2 });
+            logger.log({
+                messge: 'hello there from test',
+                testid: 2
+            });
+            logger.log({
+                messge: 'hello there from test2',
+                testid: 2
+            });
+            logger.log({
+                messge: 'hello there from test3',
+                testid: 2
+            });
             logger.close();
         });
     });
