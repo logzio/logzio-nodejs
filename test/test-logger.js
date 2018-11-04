@@ -4,6 +4,7 @@ var request = require('request');
 var nock = require('nock');
 var assert = require('assert');
 var moment = require('moment');
+var zlib = require('zlib');
 
 var dummyHost = 'logz.io';
 var nockHttpAddress = 'http://' + dummyHost + ':8070';
@@ -90,25 +91,6 @@ describe('logger', function () {
             logger.close();
         });
 
-        it('sends log as an object with type', function (done) {
-            var logger = createLogger({
-                bufferSize: 1,
-                callback: done
-            });
-            sinon.spy(logger, '_createBulk');
-
-            var logMsg = {
-                message: 'hello there from test',
-                type: 'myTestType'
-            };
-            logger.log(logMsg);
-            assert(logger._createBulk.getCall(0).args[0][0].message == logMsg.message);
-            assert(logger._createBulk.getCall(0).args[0][0].type == logMsg.type);
-
-            logger._createBulk.restore();
-            logger.close();
-        });
-
         it('sends log as an object with extra fields', function (done) {
             var logger = createLogger({
                 bufferSize: 1,
@@ -126,6 +108,52 @@ describe('logger', function () {
             logger.log(logMsg);
             assert(logger._createBulk.getCall(0).args[0][0].extraField1 == 'val1');
             assert(logger._createBulk.getCall(0).args[0][0].extraField2 == 'val2');
+
+            logger._createBulk.restore();
+            logger.close();
+        });
+
+        it.only('sends compressed log as an object with extra fields', function (done) {
+            var logger = createLogger({
+                bufferSize: 1,
+                callback: done,
+                extraFields: {
+                    extraField1: 'val1',
+                    extraField2: 'val2'
+                },
+                doCompress: true
+            });
+            sinon.spy(logger, '_tryToSend');
+
+            var logMsg = {
+                message: 'hello there from test'
+            };
+            logger.log(logMsg);
+
+            assert(logger._tryToSend.getCall(0).args[0].headers['content-encoding'] == 'gzip');
+            var unzipBody = JSON.parse(zlib.gunzipSync(logger._tryToSend.getCall(0).args[0].body));
+            assert(unzipBody.message == logMsg.message);
+            assert(unzipBody.extraField1 == 'val1');
+            assert(unzipBody.extraField2 == 'val2');
+
+            logger._tryToSend.restore();
+            logger.close();
+        });
+
+        it('sends log as an object with type', function (done) {
+            var logger = createLogger({
+                bufferSize: 1,
+                callback: done
+            });
+            sinon.spy(logger, '_createBulk');
+
+            var logMsg = {
+                message: 'hello there from test',
+                type: 'myTestType'
+            };
+            logger.log(logMsg);
+            assert(logger._createBulk.getCall(0).args[0][0].message == logMsg.message);
+            assert(logger._createBulk.getCall(0).args[0][0].type == logMsg.type);
 
             logger._createBulk.restore();
             logger.close();
