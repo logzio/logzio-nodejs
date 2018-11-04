@@ -113,7 +113,7 @@ describe('logger', function () {
             logger.close();
         });
 
-        it.only('sends compressed log as an object with extra fields', function (done) {
+        it('sends compressed log as an object with extra fields', function (done) {
             var logger = createLogger({
                 bufferSize: 1,
                 callback: done,
