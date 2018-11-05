@@ -49,7 +49,6 @@ describe('logger', function () {
             var logMsg = 'hello there from test';
             logger.log(logMsg);
             assert(logger._createBulk.getCall(0).args[0][0].message == logMsg);
-
             logger._createBulk.restore();
             logger.close();
         });
@@ -116,28 +115,32 @@ describe('logger', function () {
         it('sends compressed log as an object with extra fields', function (done) {
             var logger = createLogger({
                 bufferSize: 1,
-                callback: done,
+                callback: onDone,
                 extraFields: {
                     extraField1: 'val1',
                     extraField2: 'val2'
                 },
                 doCompress: true
             });
-            sinon.spy(logger, '_tryToSend');
 
+            sinon.spy(logger, '_tryToSend');
             var logMsg = {
                 message: 'hello there from test'
             };
+
             logger.log(logMsg);
 
-            assert(logger._tryToSend.getCall(0).args[0].headers['content-encoding'] == 'gzip');
-            var unzipBody = JSON.parse(zlib.gunzipSync(logger._tryToSend.getCall(0).args[0].body));
-            assert(unzipBody.message == logMsg.message);
-            assert(unzipBody.extraField1 == 'val1');
-            assert(unzipBody.extraField2 == 'val2');
+            function onDone() {
+                assert(logger._tryToSend.getCall(0).args[0].headers['content-encoding'] == 'gzip');
+                var unzipBody = JSON.parse(zlib.gunzipSync(logger._tryToSend.getCall(0).args[0].body));
+                assert(unzipBody.message == logMsg.message);
+                assert(unzipBody.extraField1 == 'val1');
+                assert(unzipBody.extraField2 == 'val2');
+                logger._tryToSend.restore();
+                logger.close();
+                done();
+            }
 
-            logger._tryToSend.restore();
-            logger.close();
         });
 
         it('sends log as an object with type', function (done) {
