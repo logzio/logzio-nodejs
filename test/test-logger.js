@@ -448,7 +448,7 @@ describe('logger', function () {
             done();
         });
 
-        it.only('Msgs are only sent once', function (done) {
+        it('Msgs are only sent once', function (done) {
             // very small timeout so the first request will fail (nock setup this way above) and
             // then second attempt will succeed
             var logger = createLogger({
