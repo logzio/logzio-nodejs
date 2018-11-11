@@ -113,14 +113,16 @@ describe('logger', function () {
         });
 
         it('sends compressed log as an object with extra fields', function (done) {
+            const extraField1 = 'val1';
+            const extraField2 = 'val2';
             var logger = createLogger({
                 bufferSize: 1,
                 callback: onDone,
                 extraFields: {
-                    extraField1: 'val1',
-                    extraField2: 'val2'
+                    extraField1,
+                    extraField2
                 },
-                doCompress: true
+                compress: true
             });
 
             sinon.spy(logger, '_tryToSend');
@@ -134,8 +136,8 @@ describe('logger', function () {
                 assert(logger._tryToSend.getCall(0).args[0].headers['content-encoding'] == 'gzip');
                 var unzipBody = JSON.parse(zlib.gunzipSync(logger._tryToSend.getCall(0).args[0].body));
                 assert(unzipBody.message == logMsg.message);
-                assert(unzipBody.extraField1 == 'val1');
-                assert(unzipBody.extraField2 == 'val2');
+                assert(unzipBody.extraField1 == extraField1);
+                assert(unzipBody.extraField2 == extraField2);
                 logger._tryToSend.restore();
                 logger.close();
                 done();
