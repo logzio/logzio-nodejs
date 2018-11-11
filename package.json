@@ -3,7 +3,8 @@
   "description": "A nodejs implementation for sending logs to Logz.IO cloud service",
   "version": "0.4.15",
   "author": "Gilly Barr <gilly@logz.io>",
-  "contributors": [{
+  "contributors": [
+    {
       "name": "Gilly Barr",
       "email": "gillyb@gmail.com"
     },
