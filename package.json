@@ -3,8 +3,7 @@
   "description": "A nodejs implementation for sending logs to Logz.IO cloud service",
   "version": "0.4.15",
   "author": "Gilly Barr <gilly@logz.io>",
-  "contributors": [
-    {
+  "contributors": [{
       "name": "Gilly Barr",
       "email": "gillyb@gmail.com"
     },
@@ -43,7 +42,7 @@
     "async": "1.4.2",
     "eslint": "^5.0.1",
     "mocha": "^5.2.0",
-    "nock": "^9.4.0",
+    "nock": "10.0.2",
     "should": "^7.1.0",
     "sinon": "^1.17.1"
   },
