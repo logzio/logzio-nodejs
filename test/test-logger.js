@@ -45,7 +45,7 @@ describe('logger', () => {
 
             const logMsg = 'hello there from test';
             logger.log(logMsg);
-            assert(logger._createBulk.getCall(0).args[0][0].message == logMsg);
+            assert.equal(logger._createBulk.getCall(0).args[0][0].message, logMsg);
             logger._createBulk.restore();
             logger.close();
         });
@@ -271,12 +271,12 @@ describe('logger', () => {
             const expectedTimes = 2;
 
             function assertCalled() {
-                timesCalled++;
+                timesCalled += 1;
 
-                if (expectedTimes == timesCalled) {
+                if (expectedTimes === timesCalled) {
                     done();
                 } else if (timesCalled > expectedTimes) {
-                    throw 'called more than expected';
+                    throw new Error('called more than expected');
                 }
             }
 
@@ -361,20 +361,20 @@ describe('logger', () => {
         });
 
         it('timer send test', function (done) {
-            this.timeout(20000);
-
+            this.timeout(5000);
+            const bufferSize = 100;
             let timesCalled = 0;
             const expectedTimes = 2;
 
             function assertCalled() {
-                timesCalled++;
-                if (expectedTimes == timesCalled) done();
+                timesCalled += 1;
+                if (expectedTimes === timesCalled) done();
             }
 
             const logger = createLogger({
-                bufferSize: 100,
+                bufferSize,
                 callback: assertCalled,
-                sendIntervalMs: 5000,
+                sendIntervalMs: 10,
             });
 
             // These messages should be sent in 1 bulk 10 seconds from now (due to sendIntervalMs)
@@ -393,28 +393,29 @@ describe('logger', () => {
 
             // Schedule 100 msgs (buffer size) which should be sent in one bulk 11 seconds from start
             setTimeout(() => {
-                for (let i = 0; i < 100; i++) {
+                Array(bufferSize).fill(null).forEach(() => {
                     logger.log({
                         messge: 'hello there from test',
                         testid: 6,
                     });
-                }
+                });
                 logger.close();
-            }, 6000);
+            }, 30);
         });
     });
 
     describe('recovers after server fails one time', function () {
-        this.timeout(30000);
+        this.timeout(10000);
 
         let errorAndThenSuccessScope;
         let extraRequestScope;
+        const socketDelay = 20;
 
         before((done) => {
             nock.cleanAll();
             errorAndThenSuccessScope = nock(nockHttpAddress)
                 .post('/')
-                .socketDelay(5000)
+                .socketDelay(socketDelay)
                 .query(true)
                 .once()
                 .reply(200, '')
@@ -447,7 +448,8 @@ describe('logger', () => {
             const logger = createLogger({
                 bufferSize: 1,
                 sendIntervalMs: 50000,
-                timeout: 1000,
+                timeout: socketDelay / 2,
+                sleepUntilNextRetry: socketDelay * 2,
             });
 
             logger.log({
@@ -464,7 +466,7 @@ describe('logger', () => {
                 } else {
                     done();
                 }
-            }, 10000);
+            }, socketDelay * 3);
         });
     });
 
@@ -474,7 +476,7 @@ describe('logger', () => {
                 .stub(request, 'post')
                 .rejects({
                     statusCode: 400,
-                    cause: { code: 'BAD_REQUEST'},
+                    cause: { code: 'BAD_REQUEST' },
                     messge: 'bad',
                 });
             done();
