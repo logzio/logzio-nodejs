@@ -1,7 +1,7 @@
 {
   "name": "logzio-nodejs",
   "description": "A nodejs implementation for sending logs to Logz.IO cloud service",
-  "version": "0.4.16",
+  "version": "1.0.1",
   "author": "Gilly Barr <gilly@logz.io>",
   "contributors": [
     {
@@ -36,16 +36,19 @@
     "json-stringify-safe": "5.0.1",
     "lodash.assign": "4.2.0",
     "moment": "^2.22.1",
-    "request": "^2.87.0"
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
   },
   "devDependencies": {
     "assert": "^1.4.1",
     "async": "1.4.2",
-    "eslint": "^5.8.0",
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
     "mocha": "^5.2.0",
     "nock": "^10.0.2",
     "should": "^7.1.0",
-    "sinon": "^1.17.1"
+    "sinon": "^7.1.1"
   },
   "main": "./lib/logzio-nodejs",
   "engines": {
