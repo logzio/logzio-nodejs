@@ -63,8 +63,8 @@ describe('logger', () => {
 
             const logMsg = 'hello there from test';
             logger.log(logMsg);
-            assert(logger._createBulk.getCall(0).args[0][0].extraField1 == 'val1');
-            assert(logger._createBulk.getCall(0).args[0][0].extraField2 == 'val2');
+            assert.equal(logger._createBulk.getCall(0).args[0][0].extraField1, 'val1');
+            assert.equal(logger._createBulk.getCall(0).args[0][0].extraField2, 'val2');
 
             logger._createBulk.restore();
             logger.close();
@@ -81,7 +81,7 @@ describe('logger', () => {
                 message: 'hello there from test',
             };
             logger.log(logMsg);
-            assert(logger._createBulk.getCall(0).args[0][0].message == logMsg.message);
+            assert.equal(logger._createBulk.getCall(0).args[0][0].message, logMsg.message);
 
             logger._createBulk.restore();
             logger.close();
@@ -102,8 +102,8 @@ describe('logger', () => {
                 message: 'hello there from test',
             };
             logger.log(logMsg);
-            assert(logger._createBulk.getCall(0).args[0][0].extraField1 == 'val1');
-            assert(logger._createBulk.getCall(0).args[0][0].extraField2 == 'val2');
+            assert.equal(logger._createBulk.getCall(0).args[0][0].extraField1, 'val1');
+            assert.equal(logger._createBulk.getCall(0).args[0][0].extraField2, 'val2');
 
             logger._createBulk.restore();
             logger.close();
@@ -130,11 +130,11 @@ describe('logger', () => {
             logger.log(logMsg);
 
             function onDone() {
-                assert(logger._tryToSend.getCall(0).args[0].headers['content-encoding'] == 'gzip');
+                assert.equal(logger._tryToSend.getCall(0).args[0].headers['content-encoding'], 'gzip');
                 const unzipBody = JSON.parse(zlib.gunzipSync(logger._tryToSend.getCall(0).args[0].body));
-                assert(unzipBody.message == logMsg.message);
-                assert(unzipBody.extraField1 == extraField1);
-                assert(unzipBody.extraField2 == extraField2);
+                assert.equal(unzipBody.message, logMsg.message);
+                assert.equal(unzipBody.extraField1, extraField1);
+                assert.equal(unzipBody.extraField2, extraField2);
                 logger._tryToSend.restore();
                 logger.close();
                 done();
@@ -153,8 +153,8 @@ describe('logger', () => {
                 type: 'myTestType',
             };
             logger.log(logMsg);
-            assert(logger._createBulk.getCall(0).args[0][0].message == logMsg.message);
-            assert(logger._createBulk.getCall(0).args[0][0].type == logMsg.type);
+            assert.equal(logger._createBulk.getCall(0).args[0][0].message, logMsg.message);
+            assert.equal(logger._createBulk.getCall(0).args[0][0].type, logMsg.type);
 
             logger._createBulk.restore();
             logger.close();
@@ -170,7 +170,7 @@ describe('logger', () => {
             logger.log({
                 message: 'hello there from test',
             });
-            assert(!logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano_secs'));
+            assert.equal(logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano_secs'), false);
 
             logger._createBulk.restore();
             logger.close();
@@ -186,7 +186,7 @@ describe('logger', () => {
             logger.log({
                 message: 'hello there from test',
             });
-            assert(logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano'));
+            assert.equal(logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano'), true);
 
             logger._createBulk.restore();
             logger.close();
