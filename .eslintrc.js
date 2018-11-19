@@ -22,6 +22,6 @@ module.exports = {
             "always"
         ],
         "no-param-reassign": 1,
-        "no-underscore-dangle": 1
+        "no-underscore-dangle": 0
     }
 };
