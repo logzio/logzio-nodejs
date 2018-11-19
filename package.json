@@ -46,6 +46,7 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
     "mocha": "^5.2.0",
+    "jest": "23.6.0",
     "nock": "^10.0.2",
     "should": "^7.1.0",
     "sinon": "^7.1.1"
@@ -56,6 +57,7 @@
   },
   "license": "(Apache-2.0)",
   "scripts": {
-    "test": "node_modules/.bin/mocha"
+    "test": "mocha",
+    "watch": "mocha --watch"
   }
 }

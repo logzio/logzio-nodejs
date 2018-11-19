@@ -22,7 +22,7 @@ const createLogger = function (options) {
 
 describe('logger', () => {
     describe('logs a single line', () => {
-        before((done) => {
+        beforeAll((done) => {
             sinon
                 .stub(request, 'post')
                 .resolves({
@@ -31,7 +31,7 @@ describe('logger', () => {
             done();
         });
 
-        after((done) => {
+        afterAll((done) => {
             request.post.restore();
             done();
         });
@@ -230,7 +230,7 @@ describe('logger', () => {
     });
 
     describe('logs multiple lines', () => {
-        before((done) => {
+        beforeAll((done) => {
             sinon
                 .stub(request, 'post')
                 .resolves({
@@ -239,7 +239,7 @@ describe('logger', () => {
             done();
         });
 
-        after((done) => {
+        afterAll((done) => {
             request.post.restore();
             done();
         });
@@ -315,7 +315,7 @@ describe('logger', () => {
     });
 
     describe('#log-closing', () => {
-        before((done) => {
+        beforeAll((done) => {
             sinon
                 .stub(request, 'post')
                 .resolves({
@@ -324,7 +324,7 @@ describe('logger', () => {
             done();
         });
 
-        after((done) => {
+        afterAll((done) => {
             request.post.restore();
             done();
         });
@@ -346,7 +346,7 @@ describe('logger', () => {
     });
 
     describe('timers', () => {
-        before((done) => {
+        beforeAll((done) => {
             sinon
                 .stub(request, 'post')
                 .resolves({
@@ -355,13 +355,12 @@ describe('logger', () => {
             done();
         });
 
-        after((done) => {
+        afterAll((done) => {
             request.post.restore();
             done();
         });
 
-        it('timer send test', function (done) {
-            this.timeout(5000);
+        it('timer send test', (done) => {
             const bufferSize = 100;
             let timesCalled = 0;
             const expectedTimes = 2;
@@ -401,17 +400,15 @@ describe('logger', () => {
                 });
                 logger.close();
             }, 30);
-        });
+        }, 5000);
     });
 
-    describe('recovers after server fails one time', function () {
-        this.timeout(10000);
-
+    describe('recovers after server fails one time', () => {
         let errorAndThenSuccessScope;
         let extraRequestScope;
         const socketDelay = 20;
 
-        before((done) => {
+        beforeAll((done) => {
             nock.cleanAll();
             errorAndThenSuccessScope = nock(nockHttpAddress)
                 .post('/')
@@ -436,7 +433,7 @@ describe('logger', () => {
             done();
         });
 
-        after((done) => {
+        afterAll((done) => {
             nock.restore();
             nock.cleanAll();
             done();
@@ -466,12 +463,12 @@ describe('logger', () => {
                 } else {
                     done();
                 }
-            }, socketDelay * 3);
-        });
+            }, socketDelay * 5);
+        }, 10000);
     });
 
     describe('bad request', () => {
-        before((done) => {
+        beforeAll((done) => {
             sinon
                 .stub(request, 'post')
                 .rejects({
@@ -482,7 +479,7 @@ describe('logger', () => {
             done();
         });
 
-        after((done) => {
+        afterAll((done) => {
             request.post.restore();
             done();
         });
