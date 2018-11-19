@@ -9,16 +9,24 @@ const logzioLogger = require('../lib/logzio-nodejs.js');
 const dummyHost = 'logz.io';
 const nockHttpAddress = `http://${dummyHost}:8070`;
 
-const createLogger = function (options) {
-    const myoptions = options;
-    myoptions.token = 'testToken';
-    myoptions.type = 'testnode';
-    myoptions.debug = true;
-    myoptions.host = dummyHost;
-    myoptions.sendIntervalMs = options.sendIntervalMs || 1000;
-    return logzioLogger.createLogger(myoptions);
+const createLogger = function createLogger(options) {
+    const myOptions = options;
+    myOptions.token = 'testToken';
+    myOptions.type = 'test-node';
+    myOptions.debug = true;
+    myOptions.host = dummyHost;
+    myOptions.sendIntervalMs = options.sendIntervalMs || 1000;
+    return logzioLogger.createLogger(myOptions);
 };
 
+const sendLogs = (logger, count = 1, message = 'hello there from test') => {
+    Array(count).fill().forEach((item, i) => {
+        logger.log({
+            message: `${message} #${i}`,
+            id: i,
+        });
+    });
+};
 
 describe('logger', () => {
     describe('logs a single line', () => {
@@ -250,25 +258,16 @@ describe('logger', () => {
                 callback: done,
             });
 
-            logger.log({
-                messge: 'hello there from test',
-                testid: 2,
-            });
-            logger.log({
-                messge: 'hello there from test2',
-                testid: 2,
-            });
-            logger.log({
-                messge: 'hello there from test3',
-                testid: 2,
-            });
+            sendLogs(logger, 3);
 
             logger.close();
         });
 
         it('Send multiple bulks', (done) => {
             let timesCalled = 0;
-            const expectedTimes = 2;
+            const bufferSize = 3;
+            const logCount = 6;
+            const expectedTimes = logCount / bufferSize;
 
             function assertCalled() {
                 timesCalled += 1;
@@ -281,34 +280,11 @@ describe('logger', () => {
             }
 
             const logger = createLogger({
-                bufferSize: 3,
+                bufferSize,
                 callback: assertCalled,
             });
 
-            logger.log({
-                messge: 'hello there from test',
-                testid: 4,
-            });
-            logger.log({
-                messge: 'hello there from test2',
-                testid: 4,
-            });
-            logger.log({
-                messge: 'hello there from test3',
-                testid: 4,
-            });
-            logger.log({
-                messge: 'hello there from test',
-                testid: 4,
-            });
-            logger.log({
-                messge: 'hello there from test2',
-                testid: 4,
-            });
-            logger.log({
-                messge: 'hello there from test3',
-                testid: 4,
-            });
+            sendLogs(logger, logCount);
 
             logger.close();
         });
@@ -377,27 +353,10 @@ describe('logger', () => {
             });
 
             // These messages should be sent in 1 bulk 10 seconds from now (due to sendIntervalMs)
-            logger.log({
-                messge: 'hello there from test',
-                testid: 5,
-            });
-            logger.log({
-                messge: 'hello there from test2',
-                testid: 5,
-            });
-            logger.log({
-                messge: 'hello there from test3',
-                testid: 5,
-            });
-
+            sendLogs(logger, 3);
             // Schedule 100 msgs (buffer size) which should be sent in one bulk 11 seconds from start
             setTimeout(() => {
-                Array(bufferSize).fill(null).forEach(() => {
-                    logger.log({
-                        messge: 'hello there from test',
-                        testid: 6,
-                    });
-                });
+                sendLogs(logger, bufferSize);
                 logger.close();
             }, 30);
         }, 5000);
@@ -449,10 +408,7 @@ describe('logger', () => {
                 sleepUntilNextRetry: socketDelay * 2,
             });
 
-            logger.log({
-                messge: 'hello there from test',
-                testid: 5,
-            });
+            sendLogs(logger);
             logger.close();
 
             setTimeout(() => {
@@ -493,21 +449,31 @@ describe('logger', () => {
                         return;
                     }
 
-                    done('Expected an error');
+                    done(new Error('Expected an error'));
                 },
             });
-            logger.log({
-                messge: 'hello there from test',
-                testid: 2,
+
+            sendLogs(logger, 3);
+
+            logger.close();
+        });
+    });
+
+
+    describe('Logger callback', () => {
+        it('should execute external logger', (done) => {
+            const internalLogger = {
+                log: () => {
+                    done();
+                },
+            };
+
+            const logger = createLogger({
+                bufferSize: 1,
+                internalLogger,
             });
-            logger.log({
-                messge: 'hello there from test2',
-                testid: 2,
-            });
-            logger.log({
-                messge: 'hello there from test3',
-                testid: 2,
-            });
+
+            sendLogs(logger);
             logger.close();
         });
     });
