@@ -1,11 +1,9 @@
 module.exports = {
     "env": {
         "node": true,
+        "es6": true,
     },
-    "extends": "eslint:recommended",
-    "parserOptions": {
-        "ecmaVersion": 5
-    },
+    "extends": "airbnb-base",
     "rules": {
         "indent": [
             "error",
@@ -22,6 +20,8 @@ module.exports = {
         "semi": [
             "error",
             "always"
-        ]
+        ],
+        "no-param-reassign": 1,
+        "no-underscore-dangle": 0
     }
 };
