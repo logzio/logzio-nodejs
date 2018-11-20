@@ -53,11 +53,12 @@
   },
   "main": "./lib/logzio-nodejs",
   "engines": {
-    "node": ">= 0.8.0"
+    "node": ">= 6.0.0"
   },
   "license": "(Apache-2.0)",
   "scripts": {
     "test": "jest",
+    "detached": "jest --detectOpenHandles",
     "watch": "jest --watch"
   }
 }
