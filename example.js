@@ -19,7 +19,7 @@ const logger = logzioLogger.createLogger({
 });
 
 
-logger.log('ssl testing');
+logger.log('some testing');
 
 for (let i = 0; i < count; i++) {
     logger.log(`hello, this is test #:${i}`);
