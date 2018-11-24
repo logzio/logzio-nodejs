@@ -354,7 +354,8 @@ describe('logger', () => {
 
             // These messages should be sent in 1 bulk 10 seconds from now (due to sendIntervalMs)
             sendLogs(logger, 3);
-            // Schedule 100 msgs (buffer size) which should be sent in one bulk 11 seconds from start
+            // Schedule 100 msgs (buffer size)
+            // which should be sent in one bulk 11 seconds from start
             setTimeout(() => {
                 sendLogs(logger, bufferSize);
                 logger.close();
@@ -424,7 +425,12 @@ describe('logger', () => {
     });
 
     describe('bad request', () => {
-        beforeAll((done) => {
+        afterEach((done) => {
+            request.post.restore();
+            done();
+        });
+
+        it('bad request with code', (done) => {
             sinon
                 .stub(request, 'post')
                 .rejects({
@@ -432,15 +438,32 @@ describe('logger', () => {
                     cause: { code: 'BAD_REQUEST' },
                     messge: 'bad',
                 });
-            done();
+
+            const logger = createLogger({
+                bufferSize: 3,
+                callback(err) {
+                    if (err) {
+                        done();
+                        return;
+                    }
+
+                    done(new Error('Expected an error'));
+                },
+            });
+
+            sendLogs(logger, 3);
+
+            logger.close();
         });
 
-        afterAll((done) => {
-            request.post.restore();
-            done();
-        });
+        it('bad request with no cause nor code', (done) => {
+            sinon
+                .stub(request, 'post')
+                .rejects({
+                    statusCode: 400,
+                    message: 'bad',
+                });
 
-        it('bad request test', (done) => {
             const logger = createLogger({
                 bufferSize: 3,
                 callback(err) {
@@ -458,7 +481,6 @@ describe('logger', () => {
             logger.close();
         });
     });
-
 
     describe('Logger callback', () => {
         it('should execute external logger', (done) => {
