@@ -3,7 +3,8 @@
   "description": "A nodejs implementation for sending logs to Logz.IO cloud service",
   "version": "1.0.3",
   "author": "Gilly Barr <gilly@logz.io>",
-  "contributors": [{
+  "contributors": [
+    {
       "name": "Gilly Barr",
       "email": "gillyb@gmail.com"
     },
@@ -33,6 +34,8 @@
   ],
   "dependencies": {
     "json-stringify-safe": "5.0.1",
+    "just-extend": "^4.0.2",
+    "lodash": "^4.17.11",
     "lodash.assign": "4.2.0",
     "moment": "^2.22.1",
     "request": "^2.88.0",
