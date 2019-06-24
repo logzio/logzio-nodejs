@@ -57,11 +57,17 @@ A few notes are worth mentioning regarding the use of the UDP protocol:
 
 
 ## Update log
+**1.0.4 - 1.0.6**
+- Upgrade dependencies because of known security vulnerabilities 
+**1.0.3**
+- Added the bulk to the callback in case the send failed
+**1.0.2**
+- Handle no Error code on bad requests
 **1.0.1**
 - ES6
-- support node greater than node 6
-- added gzip compress option
-- added internal logger option 
+- Support node greater than node 6
+- Added gzip compress option
+- Added internal logger option 
 
 **0.4.14**  
 - UDP callback bug fix + tests
