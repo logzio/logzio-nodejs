@@ -11,7 +11,7 @@ It contains a simple retry mechanism which upon connection reset (server side) o
 ## Sample usage
 ```javascript
 var logger = require('logzio-nodejs').createLogger({
-    token: '__YOUR_API_TOKEN__',
+    token: '__YOUR_ACCOUNT_TOKEN__',
     type: 'YourLogType'     // OPTIONAL (If none is set, it will be 'nodejs')
 });
 
@@ -33,7 +33,7 @@ logger.log(obj);
 ## Options
 
 * **token**
-    Mandatory. Your API logging token. Look it up in the Device Config tab in Logz.io
+    Mandatory. Your account token. Look it up in the Device Config tab in Logz.io
 * **type** - Log type. Help classify logs into different classifications
 * **protocol** - `http`, `https` or `udp`. Default: `http`
 * **host** - Destination host name. Default: `listener.logz.io`
