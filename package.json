@@ -37,19 +37,19 @@
     "lodash.assign": "4.2.0",
     "moment": "^2.24.0",
     "request": "^2.88.0",
-    "request-promise": "^4.2.4"
+    "request-promise": "^4.2.5"
   },
   "devDependencies": {
     "assert": "^1.5.0",
     "async": "1.4.2",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.2.0",
-    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-import": "^2.19.1",
     "jest": "^24.9.0",
     "mocha": "^5.2.0",
     "nock": "^10.0.6",
     "should": "^7.1.0",
-    "sinon": "^7.4.2"
+    "sinon": "^7.5.0"
   },
   "main": "./lib/logzio-nodejs",
   "engines": {
