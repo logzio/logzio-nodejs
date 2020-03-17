@@ -1,5 +1,3 @@
-type CallbackFunction = (err: Error, bulk: object) => void;
-
 interface ILoggerOptions {
     token: string;
     host?: string;
@@ -11,7 +9,7 @@ interface ILoggerOptions {
     supressErrors?  : boolean;
     addTimestampWithNanoSecs? : boolean;
     compress? : boolean;
-    internalLogger : object;
+    internalLogger? : { log(message: string, ...args): any } & Record<string, any>;
     protocol? : string;
     port : string;
     timeout? : number;
@@ -24,7 +22,7 @@ interface ILogzioLogger extends ILoggerOptions{
     jsonToString(json: string): string;
     log(msg: string): void;
     close(): void;
-    sendAndClose(callback: CallbackFunction): void;
+    sendAndClose(callback: (error: Error, bulk: object) => void): void;
 }
 
 export function createLogger(options: ILoggerOptions): ILogzioLogger;
