@@ -26,3 +26,4 @@ interface ILogzioLogger extends ILoggerOptions{
 }
 
 export function createLogger(options: ILoggerOptions): ILogzioLogger;
+export function jsonToString(json: string): string;
