@@ -57,6 +57,10 @@ A few notes are worth mentioning regarding the use of the UDP protocol:
 
 
 ## Update log
+**2.0.0**
+- Added support for TypeScript
+- End of support for node 6
+
 **1.0.4 - 1.0.6**
 - Upgrade dependencies because of known security vulnerabilities 
 
