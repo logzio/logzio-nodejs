@@ -8,6 +8,10 @@ const logzioLogger = require('../lib/logzio-nodejs.js');
 
 const dummyHost = 'logz.io';
 const nockHttpAddress = `http://${dummyHost}:8070`;
+const nanosecAsDecimal = function nanosecAsDecimal(nanosec_timestamp){
+    return Number("0." + nanosec_timestamp);
+};
+const nanoSecDigits = 9;
 
 const createLogger = function createLogger(options) {
     const myOptions = options;
@@ -191,12 +195,34 @@ describe('logger', () => {
             });
             sinon.spy(logger, '_createBulk');
 
-            logger.log({
-                message: 'hello there from test',
-            });
+            logger.log('hello there from test');
             assert.equal(logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano'), true);
 
             logger._createBulk.restore();
+            logger.close();
+        });
+        it('pad nano-sec timestamp with zeros', (done) => {
+            logger = createLogger({
+                bufferSize: 1,
+                callback: done,
+                addTimestampWithNanoSecs: true,
+            });
+            sinon.spy(logger, '_createBulk')
+            logger.log({
+                message: 'hello there from test',
+            });
+            logger._createBulk.restore();
+            
+            const first_nano_timestamp = 234, second_nano_timestamp = 1234;
+            let padded_first_timestamp = logger.padNumberWithZeros(first_nano_timestamp);
+            let padded_second_timestamp = logger.padNumberWithZeros(second_nano_timestamp);
+
+            //testing numbers is padded with zeros to 9 digits
+            assert.equal(padded_first_timestamp.length, nanoSecDigits);
+            assert.equal(padded_second_timestamp.length, nanoSecDigits);
+            
+            //testing padding sorts the nanosec-timestamps
+            expect(nanosecAsDecimal(padded_first_timestamp) < nanosecAsDecimal(padded_second_timestamp)).toBeTruthy();
             logger.close();
         });
         it('writes a log message without @timestamp', (done) => {
