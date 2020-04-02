@@ -23,7 +23,6 @@ interface ILogzioLogger extends ILoggerOptions{
     log(msg: string): void;
     close(): void;
     sendAndClose(callback: (error: Error, bulk: object) => void): void;
-    padNumberWithZeros(nanosec_timestamp: number);
 }
 
 export function createLogger(options: ILoggerOptions): ILogzioLogger;

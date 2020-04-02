@@ -199,8 +199,20 @@ describe('logger', () => {
             assert.equal(logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano'), true);
 
             logger._createBulk.restore();
+
+            //testing length of nanosec-timestamp
+            const nanosec_index = 3;
+            const mock_log = {
+                message: 'hello there from test', 
+            };
+            logger._addTimestamp(mock_log);
+            let mock_nano_timestamp = mock_log['@timestamp_nano'].split("-")[nanosec_index];
+
+            assert.equal(mock_nano_timestamp.length, nanoSecDigits);
+
             logger.close();
         });
+
         it('pad nano-sec timestamp with zeros', (done) => {
             logger = createLogger({
                 bufferSize: 1,
@@ -208,14 +220,16 @@ describe('logger', () => {
                 addTimestampWithNanoSecs: true,
             });
             sinon.spy(logger, '_createBulk')
+            
             logger.log({
                 message: 'hello there from test',
             });
             logger._createBulk.restore();
             
-            const first_nano_timestamp = 234, second_nano_timestamp = 1234;
-            let padded_first_timestamp = logger.padNumberWithZeros(first_nano_timestamp);
-            let padded_second_timestamp = logger.padNumberWithZeros(second_nano_timestamp);
+            const first_nano_timestamp = 234;
+            const second_nano_timestamp = 1234;
+            let padded_first_timestamp = logger._padNumberWithZeros(first_nano_timestamp);
+            let padded_second_timestamp = logger._padNumberWithZeros(second_nano_timestamp);
 
             //testing numbers is padded with zeros to 9 digits
             assert.equal(padded_first_timestamp.length, nanoSecDigits);
@@ -223,8 +237,10 @@ describe('logger', () => {
             
             //testing padding sorts the nanosec-timestamps
             expect(nanosecAsDecimal(padded_first_timestamp) < nanosecAsDecimal(padded_second_timestamp)).toBeTruthy();
+
             logger.close();
         });
+        
         it('writes a log message without @timestamp', (done) => {
             const logger = createLogger({
                 // buffer is 2 so we could access the log before we send it, to analyze it
@@ -244,6 +260,7 @@ describe('logger', () => {
             assert.equal(fakeTime, moment(logger.messages[logger.messages.length - 1]['@timestamp'].valueOf()));
             logger.close();
         });
+
         it('writes a log message with a custom @timestamp', (done) => {
             const logger = createLogger({
                 // buffer is 2 so we could access the log before we send it, to analyze it
