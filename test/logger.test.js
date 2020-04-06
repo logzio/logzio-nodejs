@@ -5,13 +5,13 @@ const assert = require('assert');
 const moment = require('moment');
 const zlib = require('zlib');
 const logzioLogger = require('../lib/logzio-nodejs.js');
+var hrtimemock = require('hrtimemock');
 
 const dummyHost = 'logz.io';
 const nockHttpAddress = `http://${dummyHost}:8070`;
 const nanosecAsDecimal = function nanosecAsDecimal(nanosec_timestamp){
     return Number("0." + nanosec_timestamp);
 };
-const nanoSecDigits = 9;
 
 const createLogger = function createLogger(options) {
     const myOptions = options;
@@ -164,6 +164,7 @@ describe('logger', () => {
                 message: 'hello there from test',
                 type: 'myTestType',
             };
+            
             logger.log(logMsg);
             assert.equal(logger._createBulk.getCall(0).args[0][0].message, logMsg.message);
             assert.equal(logger._createBulk.getCall(0).args[0][0].type, logMsg.type);
@@ -172,10 +173,10 @@ describe('logger', () => {
             logger.close();
         });
 
-        it('adds nano seconds when added to options', (done) => {
-            // testing without nano seconds
+        it('default case of no nanosec-timestamp', (done) => {
             let logger = createLogger({
                 bufferSize: 1,
+                callback: done
             });
             sinon.spy(logger, '_createBulk');
 
@@ -186,8 +187,9 @@ describe('logger', () => {
 
             logger._createBulk.restore();
             logger.close();
+        });
 
-            // testing with nano seconds
+        it('add nano-sec timestamp option', (done) => {
             logger = createLogger({
                 bufferSize: 1,
                 callback: done,
@@ -195,49 +197,34 @@ describe('logger', () => {
             });
             sinon.spy(logger, '_createBulk');
 
-            logger.log('hello there from test');
+            logger.log({
+                message: 'hello there from test'
+            });
             assert.equal(logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano'), true);
-
+            
             logger._createBulk.restore();
-
-            //testing length of nanosec-timestamp
-            const nanosec_index = 3;
-            const mock_log = {
-                message: 'hello there from test', 
-            };
-            logger._addTimestamp(mock_log);
-            let mock_nano_timestamp = mock_log['@timestamp_nano'].split("-")[nanosec_index];
-
-            assert.equal(mock_nano_timestamp.length, nanoSecDigits);
-
             logger.close();
         });
 
-        it('pad nano-sec timestamp with zeros', (done) => {
+        it('valid nano-sec timestamp', (done) => {
+            const nanosec_index = 3;
             logger = createLogger({
                 bufferSize: 1,
                 callback: done,
                 addTimestampWithNanoSecs: true,
             });
-            sinon.spy(logger, '_createBulk')
-            
+            sinon.spy(logger, '_createBulk');
+            hrtimemock(0.123456);            
+            process.hrtime();
             logger.log({
-                message: 'hello there from test',
-            });
+                message: 'hello there from test'
+            })
+            const mock_log = logger._createBulk.getCall(0).args[0][0];
+            const mock_nano_timestamp = mock_log['@timestamp_nano'].split("-")[nanosec_index];
+
+            assert.equal(mock_nano_timestamp, '000123456');
+
             logger._createBulk.restore();
-            
-            const first_nano_timestamp = 234;
-            const second_nano_timestamp = 1234;
-            let padded_first_timestamp = logger._padNumberWithZeros(first_nano_timestamp);
-            let padded_second_timestamp = logger._padNumberWithZeros(second_nano_timestamp);
-
-            //testing numbers is padded with zeros to 9 digits
-            assert.equal(padded_first_timestamp.length, nanoSecDigits);
-            assert.equal(padded_second_timestamp.length, nanoSecDigits);
-            
-            //testing padding sorts the nanosec-timestamps
-            expect(nanosecAsDecimal(padded_first_timestamp) < nanosecAsDecimal(padded_second_timestamp)).toBeTruthy();
-
             logger.close();
         });
         

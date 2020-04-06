@@ -37,6 +37,7 @@
     "logzio"
   ],
   "dependencies": {
+    "hrtimemock": "^2.0.0",
     "json-stringify-safe": "5.0.1",
     "lodash.assign": "4.2.0",
     "moment": "^2.24.0",
@@ -53,7 +54,7 @@
     "mocha": "^7.1.1",
     "nock": "^12.0.3",
     "should": "^7.1.0",
-    "sinon": "^7.4.2"
+    "sinon": "^7.5.0"
   },
   "main": "./lib/logzio-nodejs",
   "engines": {
