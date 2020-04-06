@@ -5,13 +5,10 @@ const assert = require('assert');
 const moment = require('moment');
 const zlib = require('zlib');
 const logzioLogger = require('../lib/logzio-nodejs.js');
-var hrtimemock = require('hrtimemock');
+const hrtimemock = require('hrtimemock');
 
 const dummyHost = 'logz.io';
 const nockHttpAddress = `http://${dummyHost}:8070`;
-const nanosecAsDecimal = function nanosecAsDecimal(nanosec_timestamp){
-    return Number("0." + nanosec_timestamp);
-};
 
 const createLogger = function createLogger(options) {
     const myOptions = options;
@@ -173,7 +170,7 @@ describe('logger', () => {
             logger.close();
         });
 
-        it('default case of no nanosec-timestamp', (done) => {
+        it('should not include nano timestamp by default', (done) => {
             let logger = createLogger({
                 bufferSize: 1,
                 callback: done
@@ -189,40 +186,23 @@ describe('logger', () => {
             logger.close();
         });
 
-        it('add nano-sec timestamp option', (done) => {
-            logger = createLogger({
-                bufferSize: 1,
-                callback: done,
-                addTimestampWithNanoSecs: true,
-            });
-            sinon.spy(logger, '_createBulk');
-
-            logger.log({
-                message: 'hello there from test'
-            });
-            assert.equal(logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano'), true);
-            
-            logger._createBulk.restore();
-            logger.close();
-        });
-
         it('valid nano-sec timestamp', (done) => {
-            const nanosec_index = 3;
+            var mockTime = 0.123456;
+            var expectedLogTime = '000123456';
+
             logger = createLogger({
                 bufferSize: 1,
                 callback: done,
                 addTimestampWithNanoSecs: true,
             });
             sinon.spy(logger, '_createBulk');
-            hrtimemock(0.123456);            
+            hrtimemock(mockTime);            
             process.hrtime();
             logger.log({
                 message: 'hello there from test'
             })
-            const mock_log = logger._createBulk.getCall(0).args[0][0];
-            const mock_nano_timestamp = mock_log['@timestamp_nano'].split("-")[nanosec_index];
-
-            assert.equal(mock_nano_timestamp, '000123456');
+            const mockLog = logger._createBulk.getCall(0).args[0][0];
+            assert.equal(mockLog['@timestamp_nano'].endsWith(expectedLogTime), true);
 
             logger._createBulk.restore();
             logger.close();
