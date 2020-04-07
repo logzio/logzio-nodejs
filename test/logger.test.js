@@ -58,6 +58,22 @@ describe('logger', () => {
             logger.close();
         });
 
+        it('should send a log with an object as additional params', (done) => {
+            const logger = createLogger({
+                bufferSize: 1,
+                callback: done,
+            });
+            sinon.spy(logger, '_createBulk');
+            const obj = { key1: "val1", key2: "val2"};
+            const strMsg = 'message: ';
+            const expectedLog = strMsg + JSON.stringify(obj);
+            logger.log(strMsg, obj);
+
+            assert.equal(logger._createBulk.getCall(0).args[0][0].message, expectedLog);
+            logger._createBulk.restore();
+            logger.close();
+        });
+
         it('sends log as a string with extra fields', (done) => {
             const logger = createLogger({
                 bufferSize: 1,
