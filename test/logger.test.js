@@ -186,7 +186,7 @@ describe('logger', () => {
             logger.close();
         });
 
-        it('valid nano-sec timestamp', (done) => {
+        it('should add a valid nano-sec timestamp to the log', (done) => {
             var mockTime = 0.123456;
             var expectedLogTime = '000123456';
 
@@ -201,8 +201,8 @@ describe('logger', () => {
             logger.log({
                 message: 'hello there from test'
             })
-            const mockLog = logger._createBulk.getCall(0).args[0][0];
-            assert.equal(mockLog['@timestamp_nano'].endsWith(expectedLogTime), true);
+            const mockLogCall = logger._createBulk.getCall(0).args[0][0];
+            assert.equal(mockLogCall['@timestamp_nano'].endsWith(expectedLogTime), true);
 
             logger._createBulk.restore();
             logger.close();
