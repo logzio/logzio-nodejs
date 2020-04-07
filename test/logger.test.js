@@ -5,6 +5,7 @@ const assert = require('assert');
 const moment = require('moment');
 const zlib = require('zlib');
 const logzioLogger = require('../lib/logzio-nodejs.js');
+const hrtimemock = require('hrtimemock');
 
 const dummyHost = 'logz.io';
 const nockHttpAddress = `http://${dummyHost}:8070`;
@@ -160,6 +161,7 @@ describe('logger', () => {
                 message: 'hello there from test',
                 type: 'myTestType',
             };
+            
             logger.log(logMsg);
             assert.equal(logger._createBulk.getCall(0).args[0][0].message, logMsg.message);
             assert.equal(logger._createBulk.getCall(0).args[0][0].type, logMsg.type);
@@ -168,10 +170,10 @@ describe('logger', () => {
             logger.close();
         });
 
-        it('adds nano seconds when added to options', (done) => {
-            // testing without nano seconds
+        it('should not include nano timestamp by default', (done) => {
             let logger = createLogger({
                 bufferSize: 1,
+                callback: done
             });
             sinon.spy(logger, '_createBulk');
 
@@ -182,23 +184,30 @@ describe('logger', () => {
 
             logger._createBulk.restore();
             logger.close();
+        });
 
-            // testing with nano seconds
+        it('should add a valid nano-sec timestamp to the log', (done) => {
+            var mockTime = 0.123456;
+            var expectedLogTime = '000123456';
+
             logger = createLogger({
                 bufferSize: 1,
                 callback: done,
                 addTimestampWithNanoSecs: true,
             });
             sinon.spy(logger, '_createBulk');
-
+            hrtimemock(mockTime);            
+            process.hrtime();
             logger.log({
-                message: 'hello there from test',
-            });
-            assert.equal(logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano'), true);
+                message: 'hello there from test'
+            })
+            const mockLogCall = logger._createBulk.getCall(0).args[0][0];
+            assert.equal(mockLogCall['@timestamp_nano'].endsWith(expectedLogTime), true);
 
             logger._createBulk.restore();
             logger.close();
         });
+        
         it('writes a log message without @timestamp', (done) => {
             const logger = createLogger({
                 // buffer is 2 so we could access the log before we send it, to analyze it
@@ -218,6 +227,7 @@ describe('logger', () => {
             assert.equal(fakeTime, moment(logger.messages[logger.messages.length - 1]['@timestamp'].valueOf()));
             logger.close();
         });
+
         it('writes a log message with a custom @timestamp', (done) => {
             const logger = createLogger({
                 // buffer is 2 so we could access the log before we send it, to analyze it

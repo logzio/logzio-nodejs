@@ -49,11 +49,12 @@
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.2",
+    "hrtimemock": "^2.0.0",
     "jest": "^24.9.0",
     "mocha": "^7.1.1",
     "nock": "^12.0.3",
     "should": "^7.1.0",
-    "sinon": "^7.4.2"
+    "sinon": "^7.5.0"
   },
   "main": "./lib/logzio-nodejs",
   "engines": {
