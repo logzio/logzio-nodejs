@@ -58,7 +58,7 @@ describe('logger', () => {
             logger.close();
         });
 
-        it('should send a log with an object as additional params', (done) => {
+        it('should send a log with an object as additional param', (done) => {
             const logger = createLogger({
                 bufferSize: 1,
                 callback: done,

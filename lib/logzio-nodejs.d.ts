@@ -20,7 +20,7 @@ interface ILoggerOptions {
 
 interface ILogzioLogger extends ILoggerOptions{
     jsonToString(json: string): string;
-    log(msg: string): void;
+    log(msg: string, obj?: object): void;
     close(): void;
     sendAndClose(callback: (error: Error, bulk: object) => void): void;
 }
