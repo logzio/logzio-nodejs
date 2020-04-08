@@ -58,6 +58,8 @@ A few notes are worth mentioning regarding the use of the UDP protocol:
 
 ## Update log
 **2.0.1**
+- Fixed sorting by nanosec-timestamp
+- Added option to log string with an object
 - Updated Typescript declaration for optional dependencies
 
 **2.0.0**
