@@ -20,9 +20,9 @@ interface ILoggerOptions {
 
 interface ILogzioLogger extends ILoggerOptions {
     jsonToString(json: string): string;
-    log(object): void;
+    log(msg: any, obj?: object): void;
     close(): void;
-    sendAndClose(callback: (error: Error, bulk: object) => void): void;
+    sendAndClose(callback?: (error: Error, bulk: object) => void): void;
 }
 
 export function createLogger(options: ILoggerOptions): ILogzioLogger;
