@@ -14,15 +14,15 @@ interface ILoggerOptions {
     port?: string;
     timeout?: number;
     sleepUntilNextRetry?: number;
-    callback?: (err: Error, bulk: object) => void;
+    callback: (err: Error, bulk: object) => void;
     extraFields?: {};
 }
 
 interface ILogzioLogger extends ILoggerOptions {
     jsonToString(json: string): string;
-    log(object): void;
+    log(msg: any, obj?: object): void;
     close(): void;
-    sendAndClose(callback: (error: Error, bulk: object) => void): void;
+    sendAndClose(callback?: (error: Error, bulk: object) => void): void;
 }
 
 export function createLogger(options: ILoggerOptions): ILogzioLogger;
