@@ -14,7 +14,7 @@ interface ILoggerOptions {
     port?: string;
     timeout?: number;
     sleepUntilNextRetry?: number;
-    callback: (err: Error, bulk: object) => void;
+    callback?: (err: Error, bulk: object) => void;
     extraFields?: {};
 }
 
