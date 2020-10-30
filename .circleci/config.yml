@@ -9,8 +9,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install and Make 1
-          command: npm install && npm test --coverage
+          name: Install and Test
+          command: npm install && npm run coverage
       - coveralls/upload:
           parallel: true
           verbose: true
