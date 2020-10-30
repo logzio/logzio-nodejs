@@ -63,6 +63,7 @@
   "license": "(Apache-2.0)",
   "scripts": {
     "test": "jest",
+    "coverage": "jest --coverage",
     "detached": "jest --detectOpenHandles",
     "watch": "jest --watch"
   }
