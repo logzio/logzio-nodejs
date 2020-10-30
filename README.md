@@ -1,4 +1,5 @@
-![Build Status](https://travis-ci.org/logzio/logzio-nodejs.svg?branch=master)
+[![<ORG_NAME>](https://circleci.com/gh/ukmadlz/logzio-nodejs.svg?style=svg)](https://app.circleci.com/pipelines/github/ukmadlz/logzio-nodejs)
+[![Coverage Status](https://coveralls.io/repos/github/ukmadlz/logzio-nodejs/badge.svg?branch=master)](https://coveralls.io/github/ukmadlz/logzio-nodejs?branch=master)
 
 # logzio-nodejs  
 NodeJS logger for Logz.io.
