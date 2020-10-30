@@ -2,12 +2,21 @@ version: 2.1
 orbs:
   node: circleci/node@3.0.0
   coveralls: coveralls/coveralls@1.0.6
+jobs:
+  coverage:
+    docker:
+      - image: 'circleci/node:10.0.0'
+    steps:
+      - checkout
+      - run:
+          name: Install and Make 1
+          command: npm install && npm test --coverage
+      - coveralls/upload:
+          parallel: true
+          verbose: true
 workflows:
   node-tests:
     jobs:
       - node/test
-      - run:
-          name: Test with coverage
-          command: npm test --coverage
-      - coveralls/upload
+      - coverage
 
