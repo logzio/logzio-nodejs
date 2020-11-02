@@ -5,7 +5,7 @@
 # logzio-nodejs  
 NodeJS logger for Logz.io.
 The logger stashes the log messages you send into an array which is sent as a bulk once it reaches its size limit (100 messages) or time limit (10 sec) in an async fashion.
-It contains a simple retry mechanism which upon connection reset (server side) or client timeout, wait a bit (default interval of 2 seconds), and try this bulk again. It does not block other messages from being accumulated and sent (async). The interval increases by a factor of 2 between each retry until it reaches the maximum allowed attempts (3).
+It contains a retry mechanism which upon connection reset (server side) or client timeout, wait a bit (default interval of 2 seconds), and try this bulk again. It does not block other messages from being accumulated and sent (async). The interval increases by a factor of 2 between each retry until it reaches the maximum allowed attempts (3).
 
  By default, any error is logged to the console. This can be changed by supplying a callback function.
 
@@ -38,6 +38,7 @@ logger.log(obj);
     Mandatory. Your account token. Look it up in the Device Config tab in Logz.io
 * **type** - Log type. Help classify logs into different classifications
 * **protocol** - `http`, `https` or `udp`. Default: `http`
+<!--alex ignore host-hostess-->
 * **host** - Destination host name. Default: `listener.logz.io`
 * **port** - Destination port. Default port depends on protocol. For `udp` default port is `5050`, for `http` is `8070` and `8071` is for `https`
 * **sendIntervalMs** - Time in milliseconds to wait between retry attempts. Default: `2000` (2 sec)
@@ -76,6 +77,7 @@ A few notes are worth mentioning regarding the use of the UDP protocol:
 - Upgrade dependencies due to security vulnerabilities 
 
 **1.0.3**
+<!--alex ignore failed-->
 - Added the bulk to the callback in case the send failed
 
 **1.0.2**
