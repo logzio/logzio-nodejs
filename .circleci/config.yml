@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   node: circleci/node@3.0.0
   coveralls: coveralls/coveralls@1.0.6
+  alexjs-orb: lauravuo/alexjs-orb@0.0.1
 jobs:
   coverage:
     docker:
@@ -18,5 +19,6 @@ workflows:
   node-tests:
     jobs:
       - node/test
+      - alexjs-orb/lint
       - coverage
 
