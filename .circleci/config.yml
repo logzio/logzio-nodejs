@@ -18,14 +18,14 @@ jobs:
 workflows:
   node-tests:
     jobs:
-      - node/tests:
-          matrix:
-            parameters:
-              version:
-                - 16
-                - 14
-                - 12
-                - 10
+      - node/test:
+        matrix:
+          parameters:
+            version:
+              - 16.*.*
+              - 14.*.*
+              - 12.*.*
+              - 10.*.*
       - alexjs-orb/lint
       - coverage
 
