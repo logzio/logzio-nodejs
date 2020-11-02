@@ -18,7 +18,7 @@ jobs:
 workflows:
   node-tests:
     jobs:
-      - node/test:
+      - node/tests:
           matrix:
             parameters:
               version:
