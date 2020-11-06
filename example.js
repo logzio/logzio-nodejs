@@ -21,6 +21,6 @@ const logger = logzioLogger.createLogger({
 
 logger.log('some testing');
 
-for (let i = 0; i < count; i++) {
+for (let i = 0; i < count; i += 1) {
     logger.log(`hello, this is test #:${i}`);
 }
