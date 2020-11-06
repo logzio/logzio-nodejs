@@ -18,7 +18,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm install
-    - run: eslint . --ext .js,.jsx,.ts,.tsx
+    - run: npm run lint
     - run: npm test
       env:
         CI: true
