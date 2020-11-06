@@ -66,6 +66,6 @@
     "coverage": "jest --coverage",
     "detached": "jest --detectOpenHandles",
     "watch": "jest --watch",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx"
   }
 }
