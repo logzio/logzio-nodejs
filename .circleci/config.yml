@@ -35,8 +35,5 @@ workflows:
               - 14.*.*
               - 12.*.*
               - 10.*.*
-        requires:
-          - linter
       - alexjs-orb/lint
-      - coverage
 
