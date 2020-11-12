@@ -37,6 +37,4 @@ workflows:
               - 12.*.*
               - 10.*.*
       - alexjs-orb/lint
-      - coverage:
-        requires:
-          - node/test
+      - coverage
