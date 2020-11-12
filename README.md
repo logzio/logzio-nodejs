@@ -1,6 +1,5 @@
-[![<ORG_NAME>](https://circleci.com/gh/ukmadlz/logzio-nodejs.svg?style=svg)](https://app.circleci.com/pipelines/github/ukmadlz/logzio-nodejs)
-[![Coverage Status](https://coveralls.io/repos/github/ukmadlz/logzio-nodejs/badge.svg?branch=master)](https://coveralls.io/github/ukmadlz/logzio-nodejs?branch=master)
-[![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://codeclimate.com/github/codeclimate/codeclimate/maintainability)
+[![<ORG_NAME>](https://circleci.com/gh/logzio/logzio-nodejs.svg?style=svg)](https://app.circleci.com/pipelines/github/logzio/logzio-nodejs)
+[![Coverage Status](https://coveralls.io/repos/github/logzio/logzio-nodejs/badge.svg?branch=master)](https://coveralls.io/github/logzio/logzio-nodejs?branch=master)
 
 # logzio-nodejs  
 NodeJS logger for Logz.io.
