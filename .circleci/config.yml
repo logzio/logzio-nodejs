@@ -4,6 +4,14 @@ orbs:
   coveralls: coveralls/coveralls@1.0.6
   alexjs-orb: lauravuo/alexjs-orb@0.0.1
 jobs:
+  linter:
+    executor:
+      name: node/default
+      tag: '14'
+    steps:
+      - checkout
+      - node/install-packages
+      - run: npm run lint
   coverage:
     docker:
       - image: cimg/node:14.15
@@ -18,6 +26,7 @@ jobs:
 workflows:
   node-tests:
     jobs:
+      - linter
       - node/test:
         matrix:
           parameters:
