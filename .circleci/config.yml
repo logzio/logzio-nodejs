@@ -6,7 +6,7 @@ orbs:
 jobs:
   coverage:
     docker:
-      - image: cimg/node:14
+      - image: cimg/node:14.15
     steps:
       - checkout
       - run:
