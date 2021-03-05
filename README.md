@@ -47,6 +47,8 @@ logger.log(obj);
 * **addTimestampWithNanoSecs** - Add a timestamp with nano seconds granularity. This is needed when many logs are sent in the same millisecond, so you can properly order the logs in kibana. The added timestamp field will be `@timestamp_nano` Default: `false`
 * **compress** - If true the the logs are compressed in gzip format. Default: `false`
 * **internalLogger** - set internal logger that supports the function log. Default: console.
+* **extraFields** - Adds your own custom fields to each log. Add in JSON Format, for example: `extraFields : { field_1: "val_1", field_2: "val_2" , ... }` | -- |
+
 
 ## Using UDP
 A few notes are worth mentioning regarding the use of the UDP protocol:
