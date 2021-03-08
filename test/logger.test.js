@@ -4,8 +4,8 @@ const nock = require('nock');
 const assert = require('assert');
 const moment = require('moment');
 const zlib = require('zlib');
-const logzioLogger = require('../lib/logzio-nodejs.js');
 const hrtimemock = require('hrtimemock');
+const logzioLogger = require('../lib/logzio-nodejs.js');
 
 const dummyHost = 'logz.io';
 const nockHttpAddress = `http://${dummyHost}:8070`;
@@ -65,7 +65,7 @@ describe('logger', () => {
                 callback: done,
             });
             sinon.spy(logger, '_createBulk');
-            const obj = { key1: "val1", key2: "val2"};
+            const obj = { key1: 'val1', key2: 'val2' };
             const strMsg = 'message: ';
             const expectedLog = strMsg + JSON.stringify(obj);
             logger.log(strMsg, obj);
@@ -139,6 +139,7 @@ describe('logger', () => {
             const extraField2 = 'val2';
             const logger = createLogger({
                 bufferSize: 1,
+                // eslint-disable-next-line no-use-before-define
                 callback: onDone,
                 extraFields: {
                     extraField1,
@@ -156,7 +157,9 @@ describe('logger', () => {
 
             function onDone() {
                 assert.equal(logger._tryToSend.getCall(0).args[0].headers['content-encoding'], 'gzip');
-                const unzipBody = JSON.parse(zlib.gunzipSync(logger._tryToSend.getCall(0).args[0].body));
+                const unzipBody = JSON.parse(
+                    zlib.gunzipSync(logger._tryToSend.getCall(0).args[0].body),
+                );
                 assert.equal(unzipBody.message, logMsg.message);
                 assert.equal(unzipBody.extraField1, extraField1);
                 assert.equal(unzipBody.extraField2, extraField2);
@@ -177,7 +180,7 @@ describe('logger', () => {
                 message: 'hello there from test',
                 type: 'myTestType',
             };
-            
+
             logger.log(logMsg);
             assert.equal(logger._createBulk.getCall(0).args[0][0].message, logMsg.message);
             assert.equal(logger._createBulk.getCall(0).args[0][0].type, logMsg.type);
@@ -187,15 +190,16 @@ describe('logger', () => {
         });
 
         it('should not include nano timestamp by default', (done) => {
-            let logger = createLogger({
+            const logger = createLogger({
                 bufferSize: 1,
-                callback: done
+                callback: done,
             });
             sinon.spy(logger, '_createBulk');
 
             logger.log({
                 message: 'hello there from test',
             });
+            // eslint-disable-next-line no-prototype-builtins
             assert.equal(logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano_secs'), false);
 
             logger._createBulk.restore();
@@ -203,27 +207,27 @@ describe('logger', () => {
         });
 
         it('should add a valid nano-sec timestamp to the log', (done) => {
-            var mockTime = 0.123456;
-            var expectedLogTime = '000123456';
+            const mockTime = 0.123456;
+            const expectedLogTime = '000123456';
 
-            logger = createLogger({
+            const logger = createLogger({
                 bufferSize: 1,
                 callback: done,
                 addTimestampWithNanoSecs: true,
             });
             sinon.spy(logger, '_createBulk');
-            hrtimemock(mockTime);            
+            hrtimemock(mockTime);
             process.hrtime();
             logger.log({
-                message: 'hello there from test'
-            })
+                message: 'hello there from test',
+            });
             const mockLogCall = logger._createBulk.getCall(0).args[0][0];
             assert.equal(mockLogCall['@timestamp_nano'].endsWith(expectedLogTime), true);
 
             logger._createBulk.restore();
             logger.close();
         });
-        
+
         it('writes a log message without @timestamp', (done) => {
             const logger = createLogger({
                 // buffer is 2 so we could access the log before we send it, to analyze it

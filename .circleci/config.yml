@@ -1,0 +1,40 @@
+version: 2.1
+orbs:
+  node: circleci/node@4.1.0
+  coveralls: coveralls/coveralls@1.0.6
+  alexjs-orb: lauravuo/alexjs-orb@0.0.1
+jobs:
+  linter:
+    executor:
+      name: node/default
+      tag: '14.15'
+    steps:
+      - checkout
+      - node/install-packages
+      - run: npm run lint
+  coverage:
+    docker:
+      - image: cimg/node:14.15
+    steps:
+      - checkout
+      - run:
+          name: Install and Test
+          command: npm install && npm run coverage
+      - coveralls/upload:
+          parallel: true
+          verbose: true
+workflows:
+  version: 2
+  node-tests:
+    jobs:
+      - linter
+      - node/test:
+        matrix:
+          parameters:
+            version:
+              - 16.*.*
+              - 14.*.*
+              - 12.*.*
+              - 10.*.*
+      - alexjs-orb/lint
+      - coverage
