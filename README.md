@@ -42,7 +42,7 @@ logger.log(obj);
 * **bufferSize** - The maximum number of messages the logger will accumulate before sending them all as a bulk. Default: `100`.
 * **numberOfRetries** - The maximum number of retry attempts. Default: `3`
 * **debug** - Should the logger print debug messages to the console? Default: `false`
-* **debug** - Should the logger print verbose messages to the console? Default: `false`
+* **verbose** - Should the logger print verbose messages to the console? Default: `false`
 * **callback** - A callback function called when an unrecoverable error has occured in the logger. The function API is: function(err) - err being the Error object.
 * **timeout** - The read/write/connection timeout in milliseconds.
 * **addTimestampWithNanoSecs** - Add a timestamp with nano seconds granularity. This is needed when many logs are sent in the same millisecond, so you can properly order the logs in kibana. The added timestamp field will be `@timestamp_nano` Default: `false`
