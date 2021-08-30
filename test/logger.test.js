@@ -15,7 +15,6 @@ const createLogger = function createLogger(options) {
     myOptions.token = 'testToken';
     myOptions.type = 'test-node';
     myOptions.debug = true;
-    myOptions.verbose = true;
     myOptions.host = dummyHost;
     myOptions.sendIntervalMs = options.sendIntervalMs || 1000;
     return logzioLogger.createLogger(myOptions);
