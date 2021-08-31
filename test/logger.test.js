@@ -177,7 +177,7 @@ describe('logger', () => {
                 message: 'hello there from test',
                 type: 'myTestType',
             };
-            
+
             logger.log(logMsg);
             assert.equal(logger._createBulk.getCall(0).args[0][0].message, logMsg.message);
             assert.equal(logger._createBulk.getCall(0).args[0][0].type, logMsg.type);
@@ -212,7 +212,7 @@ describe('logger', () => {
                 addTimestampWithNanoSecs: true,
             });
             sinon.spy(logger, '_createBulk');
-            hrtimemock(mockTime);            
+            hrtimemock(mockTime);
             process.hrtime();
             logger.log({
                 message: 'hello there from test'
@@ -223,7 +223,7 @@ describe('logger', () => {
             logger._createBulk.restore();
             logger.close();
         });
-        
+
         it('writes a log message without @timestamp', (done) => {
             const logger = createLogger({
                 // buffer is 2 so we could access the log before we send it, to analyze it
