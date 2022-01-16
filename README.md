@@ -72,6 +72,9 @@ A few notes are worth mentioning regarding the use of the UDP protocol:
 - End of support for node 6
 - Upgrade dependencies due to security vulnerabilities 
 
+<details>
+  <summary markdown="span"> Expand to check old versions </summary>
+ 
 **1.0.4 - 1.0.6**
 - Upgrade dependencies due to security vulnerabilities 
 
@@ -137,7 +140,7 @@ A few notes are worth mentioning regarding the use of the UDP protocol:
 **0.3.1**
 - Bug fix : When calling `log` with a string parameter, the object isn't constructed properly.  
 
-
+</details>
 
 # Scripts
 
