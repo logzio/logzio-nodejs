@@ -28,7 +28,7 @@ var obj = {
 logger.log(obj);
 ```
 
-**Note:** If logzio-js is used as part of a serverless service (AWS Lambda, Azure Functions, Google Cloud Functions, etc.), add `logger.sendAndClose()` at the end of the run.
+**Note:** If logzio-js is used as part of a serverless service (AWS Lambda, Azure Functions, Google Cloud Functions, etc.), add `logger.sendAndClose()` at the end of the run. For example [sync Lambda](https://github.com/logzio/logzio-nodejs/blob/master/Serverless/lambda-sync.md) and [async Lambda](https://github.com/logzio/logzio-nodejs/blob/master/Serverless/lambda-async.md)
 
 ## Options
 
