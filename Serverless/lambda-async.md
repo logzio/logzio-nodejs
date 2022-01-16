@@ -17,10 +17,10 @@ exports.handler = async function(event,context) {
 	}
 
 	logger.log('log1')
-  logger.log('log2')
-  logger.log('log3')
+  	logger.log('log2')
+  	logger.log('log3')
  	logger.sendAndClose()
-  await sleep (2000)
+  	await sleep (2000)
 	return context
 };
 ```
