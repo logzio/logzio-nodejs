@@ -47,6 +47,7 @@ logger.log(obj);
 * **addTimestampWithNanoSecs** - Add a timestamp with nano seconds granularity. This is needed when many logs are sent in the same millisecond, so you can properly order the logs in kibana. The added timestamp field will be `@timestamp_nano` Default: `false`
 * **compress** - If true the the logs are compressed in gzip format. Default: `false`
 * **internalLogger** - set internal logger that supports the function log. Default: console.
+* **setUserAgent** - To sending logs we are providing for user to send logs with user-agent. To send logs without user-agent please change to `false`.  Default:`true`,
 * **extraFields** - Adds your own custom fields to each log. Add in JSON Format, for example: `extraFields : { field_1: "val_1", field_2: "val_2" , ... }`.
 
 
@@ -59,6 +60,12 @@ A few notes are worth mentioning regarding the use of the UDP protocol:
 
 
 ## Update log
+**2.0.4**
+- Add parameter to manage User-agent
+
+**2.0.3**
+- Add verbose logging to use in Azure serverless function
+
 **2.0.2**
 - Updated required fields for typescript
 
