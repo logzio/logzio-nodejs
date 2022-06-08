@@ -62,16 +62,20 @@ describe('logger', () => {
         it('sends log without user-agent header', (done) => {
             const logger = createLogger({
                 bufferSize: 1,
-                callback: done,
-				setUserAgent:false
+                callback: onDone,
+                setUserAgent:false
             });
-            sinon.spy(logger, '_createBulk');
+            sinon.spy(logger, '_tryToSend');
 
             const logMsg = 'hello there from test';
             logger.log(logMsg);
-            assert.equal(logger._createBulk.getCall(0).args[0][0].message, logMsg);
-            logger._createBulk.restore();
-            logger.close();
+
+            function onDone() {
+                assert.equal(logger._tryToSend.getCall(0).args[0].headers['user-agent'], undefined);
+                logger._tryToSend.restore();
+                logger.close();
+                done();
+            }
         });
 
         it('should send a log with an object as additional param', (done) => {
