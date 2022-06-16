@@ -43,7 +43,7 @@
   "dependencies": {
     "json-stringify-safe": "5.0.1",
     "lodash.assign": "4.2.0",
-    "moment": "^2.24.0",
+    "moment": "2.29.2",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
   },
