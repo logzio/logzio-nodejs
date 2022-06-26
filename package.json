@@ -1,7 +1,7 @@
 {
   "name": "logzio-nodejs",
   "description": "A nodejs implementation for sending logs to Logz.IO cloud service Copy of logzio-nodejs",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "author": "Gilly Barr <gilly@logz.io>",
   "contributors": [
     {
@@ -23,7 +23,11 @@
     {
       "name": "Roni Shaham",
       "email": "ronish31@gmail.com"
-    }
+    },
+	{
+		"name": "Anton Kolomiiets",
+		"email": "resdenia@gmail.com"
+	}
   ],
   "repository": {
     "type": "git",
@@ -39,7 +43,7 @@
   "dependencies": {
     "json-stringify-safe": "5.0.1",
     "lodash.assign": "4.2.0",
-    "moment": "^2.24.0",
+    "moment": "2.29.2",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
   },
