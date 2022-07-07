@@ -24,10 +24,10 @@
       "name": "Roni Shaham",
       "email": "ronish31@gmail.com"
     },
-	{
-		"name": "Anton Kolomiiets",
-		"email": "resdenia@gmail.com"
-	}
+    {
+      "name": "Anton Kolomiiets",
+      "email": "resdenia@gmail.com"
+    }
   ],
   "repository": {
     "type": "git",
@@ -41,11 +41,10 @@
     "logzio"
   ],
   "dependencies": {
+    "axios": "0.27.2",
     "json-stringify-safe": "5.0.1",
     "lodash.assign": "4.2.0",
-    "moment": "2.29.2",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.4"
+    "moment": "2.29.2"
   },
   "devDependencies": {
     "assert": "^1.5.0",

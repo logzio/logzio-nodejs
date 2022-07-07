@@ -1,11 +1,13 @@
 const sinon = require('sinon');
-const request = require('request-promise');
+const axios = require('axios');
 const nock = require('nock');
 const assert = require('assert');
 const moment = require('moment');
 const zlib = require('zlib');
 const logzioLogger = require('../lib/logzio-nodejs.js');
 const hrtimemock = require('hrtimemock');
+axios.defaults.adapter = require('axios/lib/adapters/http');
+
 
 const dummyHost = 'logz.io';
 const nockHttpAddress = `http://${dummyHost}:8070`;
@@ -33,7 +35,7 @@ describe('logger', () => {
     describe('logs a single line', () => {
         beforeAll((done) => {
             sinon
-                .stub(request, 'post')
+                .stub(axios, 'post')
                 .resolves({
                     statusCode: 200,
                 });
@@ -41,7 +43,7 @@ describe('logger', () => {
         });
 
         afterAll((done) => {
-            request.post.restore();
+            axios.post.restore();
             done();
         });
 
@@ -71,7 +73,7 @@ describe('logger', () => {
             logger.log(logMsg);
 
             function onDone() {
-                assert.equal(logger._tryToSend.getCall(0).args[0].headers['user-agent'], undefined);
+                assert.equal(axios.defaults.headers.common['user-agent'], undefined);
                 logger._tryToSend.restore();
                 logger.close();
                 done();
@@ -174,8 +176,8 @@ describe('logger', () => {
             logger.log(logMsg);
 
             function onDone() {
-                assert.equal(logger._tryToSend.getCall(0).args[0].headers['content-encoding'], 'gzip');
-                const unzipBody = JSON.parse(zlib.gunzipSync(logger._tryToSend.getCall(0).args[0].body));
+                assert.equal(axios.defaults.headers.post['content-encoding'], 'gzip');
+                const unzipBody = JSON.parse(zlib.gunzipSync(logger._tryToSend.getCall(0).args[0]));
                 assert.equal(unzipBody.message, logMsg.message);
                 assert.equal(unzipBody.extraField1, extraField1);
                 assert.equal(unzipBody.extraField2, extraField2);
@@ -285,7 +287,7 @@ describe('logger', () => {
     describe('logs multiple lines', () => {
         beforeAll((done) => {
             sinon
-                .stub(request, 'post')
+                .stub(axios, 'post')
                 .resolves({
                     statusCode: 200,
                 });
@@ -293,7 +295,7 @@ describe('logger', () => {
         });
 
         afterAll((done) => {
-            request.post.restore();
+            axios.post.restore();
             done();
         });
 
@@ -338,7 +340,7 @@ describe('logger', () => {
     describe('#log-closing', () => {
         beforeAll((done) => {
             sinon
-                .stub(request, 'post')
+                .stub(axios, 'post')
                 .resolves({
                     statusCode: 200,
                 });
@@ -346,7 +348,7 @@ describe('logger', () => {
         });
 
         afterAll((done) => {
-            request.post.restore();
+            axios.post.restore();
             done();
         });
 
@@ -369,7 +371,7 @@ describe('logger', () => {
     describe('timers', () => {
         beforeAll((done) => {
             sinon
-                .stub(request, 'post')
+                .stub(axios, 'post')
                 .resolves({
                     statusCode: 200,
                 });
@@ -377,7 +379,7 @@ describe('logger', () => {
         });
 
         afterAll((done) => {
-            request.post.restore();
+            axios.post.restore();
             done();
         });
 
@@ -471,13 +473,13 @@ describe('logger', () => {
 
     describe('bad request', () => {
         afterEach((done) => {
-            request.post.restore();
+            axios.post.restore();
             done();
         });
 
         it('bad request with code', (done) => {
             sinon
-                .stub(request, 'post')
+                .stub(axios, 'post')
                 .rejects({
                     statusCode: 400,
                     cause: { code: 'BAD_REQUEST' },
@@ -503,7 +505,7 @@ describe('logger', () => {
 
         it('bad request with no cause nor code', (done) => {
             sinon
-                .stub(request, 'post')
+                .stub(axios, 'post')
                 .rejects({
                     statusCode: 400,
                     message: 'bad',
