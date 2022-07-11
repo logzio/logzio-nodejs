@@ -44,7 +44,7 @@
     "axios": "0.27.2",
     "json-stringify-safe": "5.0.1",
     "lodash.assign": "4.2.0",
-    "moment": "2.29.2"
+    "moment": "2.29.4"
   },
   "devDependencies": {
     "assert": "^1.5.0",
