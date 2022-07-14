@@ -18,7 +18,6 @@ const logger = logzioLogger.createLogger({
     timeout: 1000,
 });
 
-
 logger.log('some testing');
 
 for (let i = 0; i < count; i++) {
