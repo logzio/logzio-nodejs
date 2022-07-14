@@ -5,8 +5,8 @@ const moment = require('moment');
 const zlib = require('zlib');
 const logzioLogger = require('../lib/logzio-nodejs.js');
 const hrtimemock = require('hrtimemock');
-const axiosIn = require('../lib/axiosInstance.js');
-axiosIn.defaults.adapter = require('axios/lib/adapters/http');
+const axiosInstance = require('../lib/axiosInstance.js');
+axiosInstance.defaults.adapter = require('axios/lib/adapters/http');
 
 
 const dummyHost = 'logz.io';
@@ -34,7 +34,7 @@ describe('logger', () => {
     describe('logs a single line', () => {
         beforeAll((done) => {
             sinon
-                .stub(axiosIn, 'post')
+                .stub(axiosInstance, 'post')
                 .resolves({
                     statusCode: 200,
                 });
@@ -42,7 +42,7 @@ describe('logger', () => {
         });
 
         afterAll((done) => {
-            axiosIn.post.restore();
+            axiosInstance.post.restore();
             done();
         });
 
@@ -72,7 +72,7 @@ describe('logger', () => {
             logger.log(logMsg);
 
             function onDone() {
-                assert.equal(axiosIn.defaults.headers.common['user-agent'], undefined);
+                assert.equal(axiosInstance.defaults.headers.common['user-agent'], undefined);
                 logger._tryToSend.restore();
                 logger.close();
                 done();
@@ -175,7 +175,7 @@ describe('logger', () => {
             logger.log(logMsg);
 
             function onDone() {
-                assert.equal(axiosIn.defaults.headers.post['content-encoding'], 'gzip');
+                assert.equal(axiosInstance.defaults.headers.post['content-encoding'], 'gzip');
                 const unzipBody = JSON.parse(zlib.gunzipSync(logger._tryToSend.getCall(0).args[0]));
                 assert.equal(unzipBody.message, logMsg.message);
                 assert.equal(unzipBody.extraField1, extraField1);
@@ -286,7 +286,7 @@ describe('logger', () => {
     describe('logs multiple lines', () => {
         beforeAll((done) => {
             sinon
-                .stub(axiosIn, 'post')
+                .stub(axiosInstance, 'post')
                 .resolves({
                     statusCode: 200,
                 });
@@ -294,7 +294,7 @@ describe('logger', () => {
         });
 
         afterAll((done) => {
-            axiosIn.post.restore();
+            axiosInstance.post.restore();
             done();
         });
 
@@ -339,7 +339,7 @@ describe('logger', () => {
     describe('#log-closing', () => {
         beforeAll((done) => {
             sinon
-                .stub(axiosIn, 'post')
+                .stub(axiosInstance, 'post')
                 .resolves({
                     statusCode: 200,
                 });
@@ -347,7 +347,7 @@ describe('logger', () => {
         });
 
         afterAll((done) => {
-            axiosIn.post.restore();
+            axiosInstance.post.restore();
             done();
         });
 
@@ -370,7 +370,7 @@ describe('logger', () => {
     describe('timers', () => {
         beforeAll((done) => {
             sinon
-                .stub(axiosIn, 'post')
+                .stub(axiosInstance, 'post')
                 .resolves({
                     statusCode: 200,
                 });
@@ -378,7 +378,7 @@ describe('logger', () => {
         });
 
         afterAll((done) => {
-            axiosIn.post.restore();
+            axiosInstance.post.restore();
             done();
         });
 
@@ -472,13 +472,13 @@ describe('logger', () => {
 
     describe('bad request', () => {
         afterEach((done) => {
-            axiosIn.post.restore();
+            axiosInstance.post.restore();
             done();
         });
 
         it('bad request with code', (done) => {
             sinon
-                .stub(axiosIn, 'post')
+                .stub(axiosInstance, 'post')
                 .rejects({
                     statusCode: 400,
                     cause: { code: 'BAD_REQUEST' },
@@ -504,7 +504,7 @@ describe('logger', () => {
 
         it('bad request with no cause nor code', (done) => {
             sinon
-                .stub(axiosIn, 'post')
+                .stub(axiosInstance, 'post')
                 .rejects({
                     statusCode: 400,
                     message: 'bad',
