@@ -60,6 +60,9 @@ A few notes are worth mentioning regarding the use of the UDP protocol:
 
 
 ## Update log
+**2.1.4**
+- Replace from request to axios
+
 **2.0.4**
 - Add parameter to manage User-agent
 
