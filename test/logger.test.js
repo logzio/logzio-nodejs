@@ -103,7 +103,7 @@ describe('logger', () => {
             sinon.spy(logger, '_createBulk');
             const { en0 } = networkInterfaces();
             let sourceIP;
-            if (en0.length > 0) {
+            if (en0 && en0.length > 0) {
                 en0.forEach((ip) => {
                     // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
                     // 'IPv4' is in Node <= 17, from 18 it's a number 4 or 6
