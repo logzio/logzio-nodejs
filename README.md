@@ -62,7 +62,7 @@ A few notes are worth mentioning regarding the use of the UDP protocol:
 ## Update log
 
 **2.1.5**
-- Add to the log sourceIP
+- Add sourceIP as a new field to each log
 
 **2.1.4**
 - Replace from request to axios
