@@ -1,3 +1,4 @@
+const { networkInterfaces } = require('os');
 const sinon = require('sinon');
 const nock = require('nock');
 const assert = require('assert');
@@ -94,7 +95,30 @@ describe('logger', () => {
             logger._createBulk.restore();
             logger.close();
         });
+        it('log with sourceIP', (done) => {
+            const logger = createLogger({
+                bufferSize: 1,
+                callback: done,
+            });
+            sinon.spy(logger, '_createBulk');
+            const { en0 } = networkInterfaces();
+            let sourceIP;
+            if (en0 && en0.length > 0) {
+                en0.forEach((ip) => {
+                    // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
+                    // 'IPv4' is in Node <= 17, from 18 it's a number 4 or 6
+                    const familyV4Value = typeof ip.family === 'string' ? 'IPv4' : 4;
+                    if (ip.family === familyV4Value && !ip.internal) {
+                        sourceIP = ip.address;
+                    }
+                });
+            }
+            logger.log({ message: 'sourceIp' });
 
+            assert.equal(logger._createBulk.getCall(0).args[0][0].sourceIP, sourceIP);
+            logger._createBulk.restore();
+            logger.close();
+        });
         it('sends log as a string with extra fields', (done) => {
             const logger = createLogger({
                 bufferSize: 1,
