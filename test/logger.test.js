@@ -7,7 +7,7 @@ const zlib = require('zlib');
 const logzioLogger = require('../lib/logzio-nodejs.js');
 const hrtimemock = require('hrtimemock');
 const axiosInstance = require('../lib/axiosInstance.js');
-axiosInstance.defaults.adapter = require('axios/lib/adapters/http');
+axiosInstance.defaults.adapter = 'http';
 
 
 const dummyHost = 'logz.io';
@@ -17,7 +17,7 @@ const createLogger = function createLogger(options) {
     const myOptions = options;
     myOptions.token = 'testToken';
     myOptions.type = 'test-node';
-    myOptions.debug = true;
+    myOptions.debug = options.debug??true;
     myOptions.host = dummyHost;
     myOptions.sendIntervalMs = options.sendIntervalMs || 1000;
     return logzioLogger.createLogger(myOptions);
@@ -563,6 +563,8 @@ describe('logger', () => {
             const logger = createLogger({
                 bufferSize: 1,
                 internalLogger,
+                debug: false,
+                numberOfRetries: 0,
             });
 
             sendLogs(logger);
