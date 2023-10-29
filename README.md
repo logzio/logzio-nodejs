@@ -59,6 +59,13 @@ A few notes are worth mentioning regarding the use of the UDP protocol:
 
 
 ## Update log
+**2.0.4**
+- Test node versions `14-20`
+- upgrade `axios` to `v1.6.0`
+
+**2.0.3**
+- Add verbose logging to use in Azure serverless function
+
 **2.0.2**
 - Updated required fields for typescript
 
