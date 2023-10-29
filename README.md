@@ -7,6 +7,8 @@ It contains a simple retry mechanism which upon connection reset (server side) o
 
  By default, any error is logged to the console. This can be changed by supplying a callback function.
 
+## Before you begin you will need:
+- `Nodejs` with version 14.x or above
 
 ## Sample usage
 ```javascript
@@ -60,6 +62,9 @@ A few notes are worth mentioning regarding the use of the UDP protocol:
 
 
 ## Update log
+**2.1.6**
+- Test node versions `14-20`
+- upgrade `axios` to `v1.6.0` (contributed by @gcagle3)
 
 **2.1.5**
 - Add sourceIP as a new field to each log
