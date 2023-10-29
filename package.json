@@ -61,7 +61,7 @@
   },
   "main": "./lib/logzio-nodejs",
   "engines": {
-    "node": ">= 6.0.0"
+    "node": ">= 14.0.0"
   },
   "license": "(Apache-2.0)",
   "scripts": {
