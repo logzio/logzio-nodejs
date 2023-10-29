@@ -7,6 +7,8 @@ It contains a simple retry mechanism which upon connection reset (server side) o
 
  By default, any error is logged to the console. This can be changed by supplying a callback function.
 
+## Before you begin you will need:
+- `Nodejs` with version 14.x or above
 
 ## Sample usage
 ```javascript
