@@ -62,6 +62,9 @@ A few notes are worth mentioning regarding the use of the UDP protocol:
 
 
 ## Update log
+**2.1.7**
+- upgrade `axios` to `v1.6.4` (contributed by @gcagle3)
+
 **2.1.6**
 - Test node versions `14-20`
 - upgrade `axios` to `v1.6.0` (contributed by @gcagle3)
