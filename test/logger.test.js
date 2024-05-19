@@ -64,8 +64,7 @@ describe('logger', () => {
         it('sends log without user-agent header', (done) => {
             const logger = createLogger({
                 bufferSize: 1,
-                callback: onDone,
-                setUserAgent:false
+                callback: onDone
             });
             sinon.spy(logger, '_tryToSend');
 
