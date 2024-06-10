@@ -7,6 +7,7 @@ const zlib = require('zlib');
 const logzioLogger = require('../lib/logzio-nodejs.js');
 const hrtimemock = require('hrtimemock');
 const axiosInstance = require('../lib/axiosInstance.js');
+const prop = require('../package.json');
 axiosInstance.defaults.adapter = 'http';
 
 
@@ -61,7 +62,7 @@ describe('logger', () => {
             logger.close();
         });
 
-        it('sends log without user-agent header', (done) => {
+        it('sends log with user-agent header', (done) => {
             const logger = createLogger({
                 bufferSize: 1,
                 callback: onDone
@@ -72,7 +73,7 @@ describe('logger', () => {
             logger.log(logMsg);
 
             function onDone() {
-                assert.equal(axiosInstance.defaults.headers.common['user-agent'], undefined);
+                assert.equal(axiosInstance.defaults.headers.post['user-agent'], `NodeJS/${prop.version} logs`);
                 logger._tryToSend.restore();
                 logger.close();
                 done();
