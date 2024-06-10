@@ -11,7 +11,6 @@ interface ILoggerOptions {
 	compress?: boolean;
 	internalLogger?: { log(message: string, ...args: any[]): any } & Record<string, any>;
 	protocol?: string;
-	setUserAgent?: boolean;
 	port?: string;
 	timeout?: number;
 	sleepUntilNextRetry?: number;
