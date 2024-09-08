@@ -65,7 +65,7 @@ A few notes are worth mentioning regarding the use of the UDP protocol:
   git clone https://github.com/logzio/logzio-nodejs.git
   cd logzio-nodejs
   ```
-2. buils and run tests:
+2. build and run tests:
   ```bash
   npm install
   npm test
