@@ -60,12 +60,12 @@ A few notes are worth mentioning regarding the use of the UDP protocol:
 * When using UDP, each message is sent separately, and not using the bulk API. This means that the meaning of `bufferSize` is slightly different in this case. The messages will still be sent separately, but the logger will wait for the buffer to reach the size specified before sending out all the messages. If you want each message to be sent out immediately, then set `bufferSize = 1`.
 
 ## Build and test locally
-1. clone the repository:
+1. Clone the repository:
   ```bash
   git clone https://github.com/logzio/logzio-nodejs.git
   cd logzio-nodejs
   ```
-2. build and run tests:
+2. Build and run tests:
   ```bash
   npm install
   npm test
