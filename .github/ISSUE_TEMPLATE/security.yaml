@@ -1,0 +1,13 @@
+name: Security issue
+description: Report a security issue
+body:
+  - type: textarea
+    attributes:
+      label: Describe the security issue
+      description: A clear description of what the security issue is, including what version of the project is affected, and the vounerabile dependency.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add any other context or screenshots about the feature request here.
