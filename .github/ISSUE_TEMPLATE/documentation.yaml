@@ -1,0 +1,22 @@
+name: Documentation issue
+description: Report an issue with the documentation
+labels: ["documentation"]
+body:
+  - type: textarea
+    attributes:
+      label: Describe the documentation issue
+      description: A clear description of what the issue is, including what part of the documentation is affected.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Suggested Fix
+      description: If possible, suggest how we can fix this documentation issue.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add any other context or screenshots about the documentation issue here.
+    validations:
+      required: false
