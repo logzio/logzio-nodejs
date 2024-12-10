@@ -44,7 +44,11 @@ logger.log(obj);
 * **bufferSize** - The maximum number of messages the logger will accumulate before sending them all as a bulk. Default: `100`.
 * **numberOfRetries** - The maximum number of retry attempts. Default: `3`
 * **debug** - Should the logger print debug messages to the console? Default: `false`
-* **callback** - A callback function called when an unrecoverable error has occured in the logger. The function API is: function(err) - err being the Error object.
+* **callback**
+    - A callback function called when sending a bulk of messages. The callback function is called as follows:
+        - On success: `callback()`
+        - On error: `callback(error)` where `error` is the Error object.
+    - This function allows you to handle errors and successful transmissions differently.
 * **timeout** - The read/write/connection timeout in milliseconds.
 * **addTimestampWithNanoSecs** - Add a timestamp with nano seconds granularity. This is needed when many logs are sent in the same millisecond, so you can properly order the logs in kibana. The added timestamp field will be `@timestamp_nano` Default: `false`
 * **compress** - If true the the logs are compressed in gzip format. Default: `false`
@@ -58,6 +62,42 @@ A few notes are worth mentioning regarding the use of the UDP protocol:
   * There is no guarantee that the logs have been received.
   * UDP can't take advantage of the bulk API, so performance is sub-optimal.
 * When using UDP, each message is sent separately, and not using the bulk API. This means that the meaning of `bufferSize` is slightly different in this case. The messages will still be sent separately, but the logger will wait for the buffer to reach the size specified before sending out all the messages. If you want each message to be sent out immediately, then set `bufferSize = 1`.
+
+## Callback Usage
+
+The `callback` option allows you to handle errors and successful transmissions when logging messages. The callback function can be used to handle different scenarios such as logging errors or confirming successful log transmissions.
+
+### When the Callback is Called
+
+1. **On Error**: The callback is called with an error object if there is an issue sending the log messages.
+2. **On Success**: The callback is called without any arguments if the log messages are sent successfully.
+
+### Example Usage
+
+```javascript
+var logger = require('logzio-nodejs').createLogger({
+    token: '__YOUR_ACCOUNT_TOKEN__',
+    type: 'YourLogType',
+    callback: function(err) {
+        if (err) {
+            console.error('Error sending log:', err);
+        } else {
+            console.log('Log sent successfully');
+        }
+    }
+});
+
+// Sending a log message
+logger.log('This is a log message');
+```
+### Default callback
+```javascript
+    _defaultCallback(err) {
+        if (err && !this.supressErrors) {
+            this.internalLogger.log(`logzio-logger error: ${err}`, err);
+        }
+    }
+```
 
 ## Build and test locally
 1. Clone the repository:
