@@ -49,6 +49,7 @@
   "dependencies": {
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/context-async-hooks": "^1.30.0",
+    "@opentelemetry/sdk-trace-node": "^1.30.0",
     "axios": "^1.6.4",
     "json-stringify-safe": "5.0.1",
     "lodash.assign": "4.2.0",
