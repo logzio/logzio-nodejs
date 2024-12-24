@@ -54,6 +54,7 @@ logger.log(obj);
 * **compress** - If true the the logs are compressed in gzip format. Default: `false`
 * **internalLogger** - set internal logger that supports the function log. Default: console.
 * **extraFields** - Adds your own custom fields to each log. Add in JSON Format, for example: `extraFields : { field_1: "val_1", field_2: "val_2" , ... }`.
+* **addOtelContext** - Add `trace_id`, `span_id`, `service_name` fields to logs when opentelemetry context is available.  Default: `true`
 
 
 ## Using UDP
@@ -99,6 +100,17 @@ logger.log('This is a log message');
     }
 ```
 
+## Add opentelemetry context
+If you're sending traces with OpenTelemetry instrumentation (auto or manual), you can correlate your logs with the trace context. That way, your logs will have traces data in it, such as service name, span id and trace id (version >= `2.2.0`). This feature is enabled by default, To disable it, set the `AddOtelContext` param in your handler configuration to `false`, like in this example:
+
+```javascript
+var logger = require('logzio-nodejs').createLogger({
+  token: 'token',
+  type: 'no-otel-context',
+  addOtelContext: false
+});
+```
+
 ## Build and test locally
 1. Clone the repository:
   ```bash
@@ -112,6 +124,10 @@ logger.log('This is a log message');
   ```
 
 ## Update log
+**2.2.0**
+- Add `addOtelContext` configuration option:
+  - `trace_id`, `span_id`, `service_name` fields to logs when opentelemetry context is available.
+
 **2.1.8**
 - Make `User-Agent` not optional and add the version to it.
 

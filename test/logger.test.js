@@ -9,6 +9,8 @@ const hrtimemock = require('hrtimemock');
 const axiosInstance = require('../lib/axiosInstance.js');
 const prop = require('../package.json');
 axiosInstance.defaults.adapter = 'http';
+const { trace, context } = require('@opentelemetry/api');
+const { NodeTracerProvider } = require('@opentelemetry/sdk-trace-node');
 
 
 const dummyHost = 'logz.io';
@@ -32,7 +34,51 @@ const sendLogs = (logger, count = 1, message = 'hello there from test') => {
         });
     });
 };
+
+const provider = new NodeTracerProvider();
+provider.register();
+const tracer = trace.getTracer('test-tracer');
+
+
 describe('logger', () => {
+    describe('_addOpentelemetryContext', () => {
+      it('should attach traceId and spanId when a span is active', () => {
+        let logger = createLogger({
+          bufferSize: 1,
+        });
+        sinon.spy(logger, '_createBulk');
+    
+        let logMessage;
+    
+        tracer.startActiveSpan('test-span', (span) => {
+          logMessage = {
+            message: 'test message with active span'
+          };
+          logger.log(logMessage);
+          span.end();
+        });
+    
+        const loggedMessage = logger._createBulk.getCall(0).args[0][0];
+        assert(loggedMessage.trace_id, 'trace_id should exist');
+        assert(loggedMessage.span_id, 'span_id should exist');
+      });
+    
+      it('should not attach traceId or spanId when no span is active', () => {
+        let logger = createLogger({
+          bufferSize: 1,
+          });
+        sinon.spy(logger, '_createBulk');
+        let logMessage = {
+          message: 'test message without active span'
+        };
+    
+        logger.log(logMessage);
+    
+        const loggedMessage = logger._createBulk.getCall(0).args[0][0];
+        assert.strictEqual(loggedMessage.trace_id, undefined, 'trace_id should not exist');
+        assert.strictEqual(loggedMessage.span_id, undefined, 'span_id should not exist');
+      });
+    });
     describe('logs a single line', () => {
         beforeAll((done) => {
             sinon
