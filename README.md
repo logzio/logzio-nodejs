@@ -112,6 +112,8 @@ logger.log('This is a log message');
   ```
 
 ## Update log
+**2.2.0**
+- Add `traceId` and `spanId` fields to logs when opentelemetry context is available.
 **2.1.8**
 - Make `User-Agent` not optional and add the version to it.
 
