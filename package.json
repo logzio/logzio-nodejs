@@ -1,7 +1,7 @@
 {
   "name": "logzio-nodejs",
   "description": "A nodejs implementation for sending logs to Logz.IO cloud service Copy of logzio-nodejs",
-  "version": "2.1.8",
+  "version": "2.2.0",
   "author": "Gilly Barr <gilly@logz.io>",
   "maintainers": [
     {
@@ -47,6 +47,8 @@
     "logzio"
   ],
   "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/context-async-hooks": "^1.30.0",
     "axios": "^1.6.4",
     "json-stringify-safe": "5.0.1",
     "lodash.assign": "4.2.0",
