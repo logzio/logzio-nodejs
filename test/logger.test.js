@@ -617,4 +617,53 @@ describe('logger', () => {
             logger.close();
         });
     });
+
+    describe('Flush log messages', () => {
+
+        afterAll((done) => {
+            axiosInstance.post.restore();
+            done();
+        });
+
+        beforeAll((done) => {
+            sinon
+                .stub(axiosInstance, 'post')
+                .resolves({
+                    statusCode: 200,
+                });
+            done();
+        });
+
+        it('should send one log at a time', (done) => {
+            let timesCalled = 0;
+            const bufferSize = 3;
+            const logCount = 3;
+            const expectedTimes = 3;
+
+            function assertCalled() {
+                timesCalled += 1;
+
+                if (logCount === timesCalled) {
+                    done();
+                } else if (timesCalled > expectedTimes) {
+                    throw new Error('called less times than expected');
+                }
+            }
+
+            const logger = createLogger({
+                bufferSize,
+                callback: assertCalled,
+            });
+
+            Array(count).fill().forEach((item, i) => {
+                logger.log({
+                    message: `${message} #${i}`,
+                    id: i,
+                });
+                logger.flush();
+            });
+
+            logger.close();
+        });
+    });
 });

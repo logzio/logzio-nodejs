@@ -23,6 +23,7 @@ interface ILogzioLogger extends ILoggerOptions {
 	log(msg: any, obj?: object): void;
 	close(): void;
 	sendAndClose(callback?: (error: Error, bulk: object) => void): void;
+	flush(callback?: (error: Error, bulk: object) => void): void;
 }
 
 export function createLogger(options: ILoggerOptions): ILogzioLogger;
