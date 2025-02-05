@@ -652,15 +652,15 @@ describe('logger', () => {
 
             const logger = createLogger({
                 bufferSize,
-                callback: assertCalled,
             });
 
-            Array(count).fill().forEach((item, i) => {
+            Array(logCount).fill().forEach((item, i) => {
                 logger.log({
-                    message: `${message} #${i}`,
+                    message: `hello there from test #${i}`,
                     id: i,
                 });
-                logger.flush();
+
+                logger.flush(assertCalled);
             });
 
             logger.close();
