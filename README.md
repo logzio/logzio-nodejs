@@ -124,6 +124,10 @@ var logger = require('logzio-nodejs').createLogger({
   ```
 
 ## Update log
+
+**2.3.0**
+- Add a method to flush the list of logs (@MarceloRGonc)
+  
 **2.2.0**
 - Add `addOtelContext` configuration option:
   - `trace_id`, `span_id`, `service_name` fields to logs when opentelemetry context is available.
