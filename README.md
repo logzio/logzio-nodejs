@@ -129,6 +129,7 @@ var logger = require('logzio-nodejs').createLogger({
   - `@opentelemetry/context-async-hooks` -> `^2.0.0`
   - `@opentelemetry/sdk-trace-node` -> `^2.0.0`
 - Fix service name retrieval in `_addOpentelemetryContext`
+- Drop support for `Node 14` 
 
 **2.3.0**
 - Add a method to flush the list of logs (@MarceloRGonc)
