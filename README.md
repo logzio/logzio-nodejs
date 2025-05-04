@@ -124,7 +124,7 @@ var logger = require('logzio-nodejs').createLogger({
   ```
 
 ## Update log
-**2.3.1**
+**2.4.0**
 - Update dependencies:
   - `@opentelemetry/context-async-hooks` -> `^2.0.0`
   - `@opentelemetry/sdk-trace-node` -> `^2.0.0`
