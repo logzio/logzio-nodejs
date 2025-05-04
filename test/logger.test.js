@@ -61,6 +61,7 @@ describe('logger', () => {
         const loggedMessage = logger._createBulk.getCall(0).args[0][0];
         assert(loggedMessage.trace_id, 'trace_id should exist');
         assert(loggedMessage.span_id, 'span_id should exist');
+        logger.close();
       });
     
       it('should not attach traceId or spanId when no span is active', () => {
@@ -77,6 +78,7 @@ describe('logger', () => {
         const loggedMessage = logger._createBulk.getCall(0).args[0][0];
         assert.strictEqual(loggedMessage.trace_id, undefined, 'trace_id should not exist');
         assert.strictEqual(loggedMessage.span_id, undefined, 'span_id should not exist');
+        logger.close();
       });
     });
     describe('logs a single line', () => {
