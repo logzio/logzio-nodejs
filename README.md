@@ -124,6 +124,12 @@ var logger = require('logzio-nodejs').createLogger({
   ```
 
 ## Update log
+**2.5.0**
+- Add null checks for `span.resource.attributes` in `_addOpentelemetryContext()`.
+- Add try catch block in `_addOpentelemetryContext()`.
+- Add `addOtelContex`t to `ILoggerOptions` ts defenition.
+- Added e2e tests
+
 **2.4.0**
 - Update dependencies:
   - `@opentelemetry/context-async-hooks` -> `^2.0.0`
