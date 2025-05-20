@@ -127,7 +127,7 @@ var logger = require('logzio-nodejs').createLogger({
 **2.5.0**
 - Add null checks for `span.resource.attributes` in `_addOpentelemetryContext()`.
 - Add try catch block in `_addOpentelemetryContext()`.
-- Add `addOtelContex`t to `ILoggerOptions` ts defenition.
+- Add `addOtelContex` to `ILoggerOptions` TypeScript defenition.
 - Added e2e tests
 
 **2.4.0**
