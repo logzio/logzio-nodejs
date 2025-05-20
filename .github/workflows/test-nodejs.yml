@@ -33,7 +33,7 @@ jobs:
         node-version: [ 16.x, 18.x, 20.x, 22.x]
     env:
       LOGZIO_API_TOKEN: ${{ secrets.LOGZIO_API_TOKEN }}
-      LOGZIO_SHIPPING_TOKEN: ${{ secrets.LOGZIO_SHIPPING_TOKEN }}
+      LOGZIO_LOGS_TOKEN: ${{ secrets.LOGZIO_LOGS_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
