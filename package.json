@@ -1,7 +1,7 @@
 {
   "name": "logzio-nodejs",
   "description": "A nodejs implementation for sending logs to Logz.IO cloud service Copy of logzio-nodejs",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "author": "Gilly Barr <gilly@logz.io>",
   "maintainers": [
     {
@@ -57,6 +57,7 @@
   },
   "devDependencies": {
     "assert": "^1.5.0",
+    "uuid": "^9.0.0",
     "async": "1.4.2",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.2.0",
@@ -75,6 +76,7 @@
   "license": "(Apache-2.0)",
   "scripts": {
     "test": "jest",
+    "test:e2e": "jest e2e.test.js",
     "detached": "jest --detectOpenHandles",
     "watch": "jest --watch"
   }
