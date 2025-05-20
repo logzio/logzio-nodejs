@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      LOGZIO_API_TOKEN: ${{ secrets.LOGZIO_API_TOKEN }}
+      LOGZIO_SHIPPING_TOKEN: ${{ secrets.LOGZIO_SHIPPING_TOKEN }}
     strategy:
       matrix:
         node-version: [ 16.x, 18.x, 20.x, 22.x]
