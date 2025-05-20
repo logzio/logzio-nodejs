@@ -7,8 +7,8 @@ const { NodeTracerProvider } = require('@opentelemetry/sdk-trace-node');
 const { AsyncHooksContextManager } = require('@opentelemetry/context-async-hooks');
 
 const LOGZIO_API_TOKEN = process.env.LOGZIO_API_TOKEN; 
-const LOGZIO_SHIPPING_TOKEN = process.env.LOGZIO_SHIPPING_TOKEN;
-const runE2ETests = LOGZIO_API_TOKEN && LOGZIO_SHIPPING_TOKEN;
+const LOGZIO_LOGS_TOKEN = process.env.LOGZIO_LOGS_TOKEN;
+const runE2ETests = LOGZIO_API_TOKEN && LOGZIO_LOGS_TOKEN;
 
 /**
  * Polls the Logz.io Search API until a log with the given run_id is found, or times out.
@@ -89,7 +89,7 @@ const setupOtelContext = () => {
     console.log(`Starting E2E test with test_run_id=${testRunId}`);
     
     const logger = logzioLogger.createLogger({
-      token: LOGZIO_SHIPPING_TOKEN,
+      token: LOGZIO_LOGS_TOKEN,
       type: 'nodejs-e2e-test',
       debug: true
     });
@@ -120,7 +120,7 @@ const setupOtelContext = () => {
     console.log(`Starting E2E test for additional fields with test_run_id=${testRunId}`);
     
     const logger = logzioLogger.createLogger({
-      token: LOGZIO_SHIPPING_TOKEN,
+      token: LOGZIO_LOGS_TOKEN,
       type: 'nodejs-e2e-test',
       debug: true,
       extraFields: {
@@ -157,7 +157,7 @@ const setupOtelContext = () => {
     const { tracer, cleanup } = setupOtelContext();
     
     const logger = logzioLogger.createLogger({
-      token: LOGZIO_SHIPPING_TOKEN,
+      token: LOGZIO_LOGS_TOKEN,
       type: 'nodejs-e2e-test-otel',
       debug: true,
       addOtelContext: true
@@ -203,10 +203,10 @@ const setupOtelContext = () => {
     console.log(`Starting E2E test for no OpenTelemetry context with test_run_id=${testRunId}`);
     
     const logger = logzioLogger.createLogger({
-      token: LOGZIO_SHIPPING_TOKEN,
+      token: LOGZIO_LOGS_TOKEN,
       type: 'nodejs-e2e-test-no-otel',
       debug: true,
-      addOtelContext: true  // Enable OpenTelemetry context, but no context exists
+      addOtelContext: true 
     });
     
     logger.log({
