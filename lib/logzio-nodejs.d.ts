@@ -16,6 +16,7 @@ interface ILoggerOptions {
 	sleepUntilNextRetry?: number;
 	callback?: (err: Error, bulk: object) => void;
 	extraFields?: {};
+	addOtelContext?: boolean;
 }
 
 interface ILogzioLogger extends ILoggerOptions {
