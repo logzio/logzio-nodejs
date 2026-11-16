@@ -9,7 +9,7 @@ const hrtimemock = require('hrtimemock');
 const axiosInstance = require('../lib/axiosInstance.js');
 const prop = require('../package.json');
 axiosInstance.defaults.adapter = 'http';
-const { trace, context } = require('@opentelemetry/api');
+const { trace } = require('@opentelemetry/api');
 const { NodeTracerProvider } = require('@opentelemetry/sdk-trace-node');
 
 
@@ -288,7 +288,7 @@ describe('logger', () => {
             logger.log({
                 message: 'hello there from test',
             });
-            assert.equal(logger._createBulk.getCall(0).args[0][0].hasOwnProperty('@timestamp_nano_secs'), false);
+            assert.equal(Object.prototype.hasOwnProperty.call(logger._createBulk.getCall(0).args[0][0], '@timestamp_nano_secs'), false);
 
             logger._createBulk.restore();
             logger.close();
@@ -298,7 +298,7 @@ describe('logger', () => {
             var mockTime = 0.123456;
             var expectedLogTime = '000123456';
 
-            logger = createLogger({
+            const logger = createLogger({
                 bufferSize: 1,
                 callback: done,
                 addTimestampWithNanoSecs: true,
@@ -433,7 +433,7 @@ describe('logger', () => {
                     messge: 'hello there from test',
                 });
                 done('Expected an error when logging into a closed log!');
-            } catch (ex) {
+            } catch {
                 done();
             }
         });

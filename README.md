@@ -124,6 +124,12 @@ var logger = require('logzio-nodejs').createLogger({
   ```
 
 ## Update log
+**2.5.1**
+- Remove unused `moment` dependency.
+- Move `@opentelemetry/sdk-trace-node` and `@opentelemetry/context-async-hooks` to dev dependencies (only used in tests). The logger only needs `@opentelemetry/api`.
+- Update `axios` to `^1.21.1` to fix security vulnerabilities.
+- Update dev dependencies (`eslint` 9, `uuid` 11) and add `npm run lint`.
+
 **2.5.0**
 - Add null checks for `span.resource.attributes` in `_addOpentelemetryContext()`.
 - Add try catch block in `_addOpentelemetryContext()`.
