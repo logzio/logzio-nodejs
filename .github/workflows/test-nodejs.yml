@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 16.x, 18.x, 20.x, 22.x]
+        node-version: [ 20.x, 22.x, 24.x ]
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [ 16.x, 18.x, 20.x, 22.x]
+        node-version: [ 20.x, 22.x, 24.x ]
     env:
       LOGZIO_API_TOKEN: ${{ secrets.LOGZIO_API_TOKEN }}
       LOGZIO_LOGS_TOKEN: ${{ secrets.LOGZIO_LOGS_TOKEN }}
