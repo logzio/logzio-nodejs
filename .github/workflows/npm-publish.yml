@@ -1,16 +1,24 @@
+name: Release New logzio-nodejs Library Version
+
+permissions:
+  id-token: write # Required for OIDC
+  contents: read
+
 on:
   release:
-    types: [published]
+    types:
+     - published
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
       - run: npm install
       - run: npm test
-      - uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
+      - run: npm publish --provenance
+        env:
+          NODE_AUTH_TOKEN: '' # Clear setup-node default to allow OIDC Trusted Publishing
